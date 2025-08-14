@@ -1,0 +1,18 @@
+# Arquivos de sessão, swap e backup do Vim/Neovim
+*.swp
+*.swo
+*~
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de log que podem ser gerados por plugins
+*.log
+
+# Diretório de dados do Neovim (embora o lazy use o stdpath, é uma boa prática)
+.nvim-data/
+
+# Um arquivo para configurações locais/pessoais que não devem ser versionadas
+# (bom para adicionar no futuro, se necessário)
+lua/local_settings.lua
