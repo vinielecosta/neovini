@@ -16,15 +16,12 @@ return {
     config = function()
         local dap = require('dap')
 
-        -- Configuração base do adaptador .NET
         dap.adapters.coreclr = {
             type = 'executable',
-            command = 'C:/netcoredbg/netcoredbg.exe', -- Confirme se seu caminho está correto
+            command = 'C:/netcoredbg/netcoredbg.exe',
             args = {'--interpreter=vscode'}
         }
 
-        -- Tabela de configuração que servirá como TEMPLATE para o debug.
-        -- A propriedade 'program' será preenchida dinamicamente.
         dap.configurations.cs = {{
             type = 'coreclr',
             name = 'launch - Web API (dynamic)',
@@ -41,50 +38,86 @@ return {
                     args = '/C start ${auto-detect-url}'
                 }
             }
-            -- A propriedade 'program' será adicionada aqui pela nossa função customizada
         }}
 
         ---
-        -- FUNÇÃO OTIMIZADA QUE ORQUESTRA O PROCESSO DE DEBUG
+        -- FUNÇÃO PRINCIPAL QUE ORQUESTRA O BUILD E O DEBUG
         ---
         local function start_net_debug_session()
-            -- Carrega as ferramentas do Telescope
             local telescope_builtin = require('telescope.builtin')
             local actions = require('telescope.actions')
             local action_state = require('telescope.actions.state')
 
-            -- Inicia o processo selecionando o projeto
             telescope_builtin.find_files({
-                prompt_title = 'Select .NET Project to Debug',
-                -- Procura por todos os arquivos .csproj na pasta da solução
+                prompt_title = 'Select .NET Project to Build and Debug',
                 find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
                 attach_mappings = function(prompt_bufnr, map)
-                    -- Ação final: Pegar o projeto, deduzir a DLL e iniciar o debug
-                    local function select_project_and_launch()
-                        -- Pega o caminho completo do .csproj selecionado
+                    local function select_project_and_build()
                         local selection = action_state.get_selected_entry()
                         local csproj_path = selection.value
                         actions.close(prompt_bufnr)
 
-                        -- **LÓGICA AUTOMÁTICA PARA ENCONTRAR A DLL**
-                        -- 1. Pega o nome do arquivo de projeto sem a extensão (ex: "WebApplication4")
-                        local project_name = vim.fn.fnamemodify(csproj_path, ':t:r')
-                        -- 2. Pega o diretório do arquivo de projeto
-                        local project_dir = vim.fn.fnamemodify(csproj_path, ':h')
-                        -- 3. Monta o caminho completo para a DLL correspondente
-                        local dll_path = project_dir .. '/bin/Debug/net8.0/' .. project_name .. '.dll'
+                        -- **NOVA LÓGICA DE BUILD ASSÍNCRONO**
 
-                        -- Pega nosso template de configuração
-                        local dap_config = dap.configurations.cs[1]
-                        -- Define dinamicamente o programa a ser executado
-                        dap_config.program = dll_path
+                        -- 1. Cria um terminal flutuante para mostrar a saída do build
+                        local buf = vim.api.nvim_create_buf(false, true)
+                        local width = math.floor(vim.api.nvim_get_option('columns') * 0.8)
+                        local height = math.floor(vim.api.nvim_get_option('lines') * 0.8)
+                        local win = vim.api.nvim_open_win(buf, true, {
+                            relative = 'editor',
+                            width = width,
+                            height = height,
+                            row = math.floor((vim.api.nvim_get_option('lines') - height) / 2),
+                            col = math.floor((vim.api.nvim_get_option('columns') - width) / 2),
+                            border = 'rounded',
+                            title = 'Building ' .. vim.fn.fnamemodify(csproj_path, ':t')
+                        })
+                        vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
 
-                        -- Inicia a sessão de debug com a configuração finalizada
-                        dap.run(dap_config)
+                        -- 2. Define o que fazer quando o build terminar
+                        local on_build_exit = function(_, exit_code)
+                            if exit_code == 0 then
+                                -- SUCESSO: fecha o terminal e inicia o debug
+                                vim.api.nvim_win_close(win, true)
+                                vim.notify('Build bem-sucedido! Iniciando debugger...', vim.log.levels.INFO)
+
+                                -- Lógica para iniciar o DAP (a que tínhamos antes)
+                                local project_name = vim.fn.fnamemodify(csproj_path, ':t:r')
+                                local project_dir = vim.fn.fnamemodify(csproj_path, ':h')
+                                local dll_path = project_dir .. '/bin/Debug/net8.0/' .. project_name .. '.dll'
+                                local dap_config = dap.configurations.cs[1]
+                                dap_config.program = dll_path
+                                dap.run(dap_config)
+                            else
+                                -- FALHA: mantém o terminal aberto com os erros
+                                vim.notify('Build falhou! Corrija os erros e tente novamente.', vim.log.levels.ERROR)
+                                vim.api.nvim_win_set_config(win, {
+                                    title = 'Build FALHOU!',
+                                    title_pos = 'center'
+                                })
+                            end
+                        end
+
+                        -- 3. Inicia o job de build
+                        vim.fn.jobstart('dotnet build "' .. csproj_path .. '"', {
+                            stdout_buffered = true,
+                            stderr_buffered = true,
+                            on_stdout = function(_, data)
+                                if data then
+                                    vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+                                end
+                            end,
+                            on_stderr = function(_, data)
+                                if data then
+                                    vim.api.nvim_buf_set_lines(buf, -1, -1, false, data)
+                                end
+                            end,
+                            on_exit = on_build_exit
+                        })
                     end
 
-                    map('i', '<CR>', select_project_and_launch)
-                    map('n', '<CR>', select_project_and_launch)
+                    map('i', '<CR>', select_project_and_build)
+                    map('n', '<CR>', select_project_and_build)
                     return true
                 end
             })
@@ -92,7 +125,7 @@ return {
 
         -- Mapeamentos de Teclas do Debugger
         vim.keymap.set('n', '<F5>', start_net_debug_session, {
-            desc = 'Debug: Select Project & Run'
+            desc = 'Debug: Build & Run Project'
         })
         vim.keymap.set('n', '<S-F5>', function()
             dap.terminate()
