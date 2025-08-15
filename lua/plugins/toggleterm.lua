@@ -25,6 +25,10 @@ return {
         require('toggleterm').setup({
             close_on_exit = true,
             start_in_insert = true,
+
+            -- ADICIONE ESTA LINHA PARA ESPECIFICAR O POWERSHELL
+            shell = "pwsh",
+
             direction = 'float', -- Direção padrão se nenhuma for especificada
             float_opts = {
                 border = 'rounded'

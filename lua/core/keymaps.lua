@@ -69,3 +69,58 @@ end, {
     desc = 'Rodar projeto .NET específico'
 })
 
+-- Diagnósticos (Erros e Avisos)
+keymap('n', '<leader>d', vim.diagnostic.open_float, {
+    desc = 'Mostrar diagnóstico da linha'
+})
+keymap('n', ']d', vim.diagnostic.goto_next, {
+    desc = 'Ir para o próximo diagnóstico'
+})
+keymap('n', '[d', vim.diagnostic.goto_prev, {
+    desc = 'Ir para o diagnóstico anterior'
+})
+-- Instalador de Pacotes NuGet
+keymap('n', '<leader>np', function()
+    require('core.nuget').install_package()
+end, {
+    desc = 'NuGet: Buscar e Adicionar Pacote'
+})
+keymap('n', '<leader>na', function()
+    require('core.nuget').add_package_directly()
+end, {
+    desc = 'NuGet: Adicionar Pacote Diretamente'
+})
+
+---
+-- NOVO FLUXO DE TESTES UNITÁRIOS
+---
+local function run_dotnet_tests()
+    require('telescope.builtin').find_files({
+        prompt_title = 'Selecione o Projeto de Teste (.csproj)',
+        find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
+        attach_mappings = function(prompt_bufnr, map)
+            local actions = require('telescope.actions')
+            local action_state = require('telescope.actions.state')
+            local function on_project_select()
+                local selection = action_state.get_selected_entry()
+                local project_path = selection.value
+                actions.close(prompt_bufnr)
+
+                -- Abre um terminal flutuante e executa 'dotnet test'
+                local term = require('toggleterm.terminal').Terminal:new({
+                    cmd = 'dotnet test "' .. project_path .. '"',
+                    direction = 'float',
+                    close_on_exit = false -- Mantém o terminal aberto para ver os resultados
+                })
+                term:toggle()
+            end
+            map('i', '<CR>', on_project_select)
+            map('n', '<CR>', on_project_select)
+            return true
+        end
+    })
+end
+
+keymap('n', '<leader>tt', run_dotnet_tests, {
+    desc = 'Test: Rodar testes do projeto'
+})
