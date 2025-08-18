@@ -116,6 +116,196 @@ local function run_dotnet_tests()
     })
 end
 
+-- FLUXO CORRIGIDO: Encontrar e Substituir com UI customizada
+keymap('n', '<leader>s', function()
+    local Input = require('nui.input')
+    local Popup = require('nui.popup')
+
+    local function create_input_popup(prompt, on_submit)
+        local input = Input({
+            position = {
+                row = 2,
+                col = '100%'
+            },
+            size = {
+                width = 40
+            },
+            enter = true, -- ADIÇÃO CRÍTICA: Entra no modo de inserção automaticamente
+            border = {
+                style = 'rounded',
+                text = {
+                    top = prompt,
+                    top_align = 'left'
+                }
+            },
+            win_options = {
+                winhighlight = 'Normal:Normal,FloatBorder:FloatBorder'
+            }
+        }, {
+            on_close = function()
+                vim.cmd('nohlsearch')
+            end,
+            on_submit = on_submit
+        })
+        input:mount()
+        input:map('i', '<esc>', function()
+            input:unmount()
+        end, {
+            noremap = true
+        })
+    end
+
+    create_input_popup('Encontrar: ', function(search_term)
+        if not search_term or search_term == '' then
+            return
+        end
+
+        create_input_popup('Substituir por: ', function(replace_term)
+            if not replace_term then
+                vim.cmd('nohlsearch');
+                return
+            end
+
+            local matches = {}
+            local line_count = vim.api.nvim_buf_line_count(0)
+            for i = 1, line_count do
+                local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1]
+                local last_end = 1
+                while true do
+                    local start_idx, end_idx = string.find(line, vim.pesc(search_term), last_end, true)
+                    if not start_idx then
+                        break
+                    end
+                    table.insert(matches, {
+                        line = i,
+                        start_col = start_idx - 1,
+                        end_col = end_idx
+                    })
+                    last_end = end_idx + 1
+                end
+            end
+
+            if #matches == 0 then
+                vim.notify("Palavra '" .. search_term .. "' não encontrada.", vim.log.levels.WARN)
+                return
+            end
+
+            local current_match_index = 1
+            local confirmation_popup
+
+            local function process_next_match()
+                if confirmation_popup and confirmation_popup.winid and
+                    vim.api.nvim_win_is_valid(confirmation_popup.winid) then
+                    confirmation_popup:unmount()
+                end
+                if current_match_index > #matches then
+                    vim.notify("Substituição concluída.", vim.log.levels.INFO)
+                    vim.cmd('nohlsearch')
+                    return
+                end
+
+                local match = matches[current_match_index]
+                vim.api.nvim_win_set_cursor(0, {match.line, match.start_col})
+                vim.cmd('normal! zz')
+
+                confirmation_popup = Popup({
+                    position = {
+                        row = 2,
+                        col = '100%'
+                    },
+                    size = {
+                        width = 40,
+                        height = 3
+                    },
+                    enter = true,
+                    border = {
+                        style = 'rounded',
+                        text = {
+                            top = 'Substituir?',
+                            top_align = 'center'
+                        }
+                    },
+                    win_options = {
+                        winhighlight = 'Normal:Normal,FloatBorder:FloatBorder'
+                    }
+                })
+                confirmation_popup:mount()
+
+                vim.api.nvim_buf_set_lines(confirmation_popup.bufnr, 0, -1, false, {" (y)es / (n)o / (a)ll / (q)uit"})
+                vim.bo[confirmation_popup.bufnr].modifiable = false
+
+                local function cleanup_and_run(action)
+                    if confirmation_popup and confirmation_popup.winid and
+                        vim.api.nvim_win_is_valid(confirmation_popup.winid) then
+                        confirmation_popup:unmount()
+                    end
+                    action()
+                end
+
+                local keymaps = {
+                    y = function()
+                        cleanup_and_run(function()
+                            local current_match = matches[current_match_index]
+                            local line_num = current_match.line - 1
+                            local old_line = vim.api.nvim_buf_get_lines(0, line_num, line_num + 1, false)[1]
+
+                            vim.api.nvim_buf_set_text(0, line_num, current_match.start_col, line_num,
+                                current_match.end_col, {replace_term})
+
+                            local new_line = vim.api.nvim_buf_get_lines(0, line_num, line_num + 1, false)[1]
+                            local length_diff = #new_line - #old_line
+
+                            for i = current_match_index + 1, #matches do
+                                if matches[i].line == current_match.line then
+                                    matches[i].start_col = matches[i].start_col + length_diff
+                                    matches[i].end_col = matches[i].end_col + length_diff
+                                end
+                            end
+
+                            current_match_index = current_match_index + 1
+                            process_next_match()
+                        end)
+                    end,
+                    n = function()
+                        cleanup_and_run(function()
+                            current_match_index = current_match_index + 1;
+                            process_next_match()
+                        end)
+                    end,
+                    a = function()
+                        cleanup_and_run(function()
+                            for i = #matches, current_match_index, -1 do
+                                local m = matches[i]
+                                vim.api.nvim_buf_set_text(0, m.line - 1, m.start_col, m.line - 1, m.end_col,
+                                    {replace_term})
+                            end
+                            current_match_index = #matches + 1
+                            process_next_match()
+                        end)
+                    end,
+                    q = function()
+                        cleanup_and_run(function()
+                            current_match_index = #matches + 1;
+                            process_next_match()
+                        end)
+                    end
+                }
+
+                for key, func in pairs(keymaps) do
+                    vim.api.nvim_buf_set_keymap(confirmation_popup.bufnr, 'n', key, '', {
+                        noremap = true,
+                        callback = func
+                    })
+                end
+            end
+
+            process_next_match()
+        end)
+    end)
+end, {
+    desc = 'Encontrar e Substituir no arquivo'
+})
+
 keymap('n', '<leader>tt', run_dotnet_tests, {
     desc = 'Test: Rodar testes do projeto'
 })

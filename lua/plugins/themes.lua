@@ -1,6 +1,63 @@
 -- ~/.config/nvim/lua/plugins/themes.lua
 return { -- TEMA DRACULA
+--------------------------------------------------------------------
+-- NOVA FEATURE: Barra de Ferramentas (Toolbar)
+--------------------------------------------------------------------
 {
+    'ojroques/nvim-bufbar',
+    -- Certifique-se de que a barra de ferramentas carregue com a UI
+    dependencies = {'nvim-tree/nvim-web-devicons'},
+    config = function()
+        require('bufbar').setup({
+            -- Mostra a barra de ferramentas na parte de cima
+            position = "top",
+            -- Define os elementos que aparecerão na barra
+            elements = { -- Mostra os buffers abertos (ficheiros)
+            {
+                kind = "buffers",
+                -- Como cada buffer será exibido
+                item_separator = " | ",
+                -- Botões personalizados à esquerda
+                left_separator = " ",
+                custom_area_left = {{
+                    -- Botão para o explorador de ficheiros
+                    text = "󰙅 Ficheiros",
+                    on_press = function()
+                        vim.cmd("NvimTreeToggle")
+                    end
+                }, {
+                    text = "  "
+                }, -- Espaçador
+                {
+                    -- Botão para procurar ficheiros
+                    text = "󰍉 Procurar",
+                    on_press = function()
+                        vim.cmd("Telescope find_files")
+                    end
+                }},
+                -- Botões personalizados à direita
+                right_separator = " ",
+                custom_area_right = {{
+                    -- Botão para rodar testes
+                    text = "󰙨 Testes",
+                    on_press = function()
+                        -- Requer a função que criamos em keymaps.lua
+                        -- Para evitar erros, definimos uma função global temporária
+                        -- A forma mais robusta seria mover a função para um módulo próprio
+                        if _G.run_dotnet_tests then
+                            _G.run_dotnet_tests()
+                        else
+                            vim.cmd("luafile " .. vim.fn.stdpath('config') .. "/lua/core/keymaps.lua")
+                            if _G.run_dotnet_tests then
+                                _G.run_dotnet_tests()
+                            end
+                        end
+                    end
+                }}
+            }}
+        })
+    end
+}, {
     'Mofiqul/dracula.nvim',
     priority = 1000,
     config = function()
