@@ -4,130 +4,126 @@
 
 Configuração completa para o Neovim (v0.9+), transformando-o em uma IDE moderna e rápida para o desenvolvimento de aplicações C# .NET.
 
-![Tela inicial](lua/img/a83876a4-275e-41a6-b91b-44fca440dd89.jpg)
-![Código em C# no NeoVini](lua/img/c13d588b-4946-42fa-95b8-c5e808b18945.jpg)
-
 ## ✨ Funcionalidades
 
-* **Gerenciamento de Pacotes:** `lazy.nvim` para performance e carregamento preguiçoso.
-* **Tela de Início Personalizada:** `alpha-nvim` com o logo "NeoVini :]", menu de atalhos e frases aleatórias em "mineirês".
-* **LSP (IntelliSense):** Configuração automática de `csharp-ls` via `mason.nvim`.
-* **Autocompletar:** `nvim-cmp` com fontes para LSP, snippets, buffers e caminhos.
-* **Depurador (Debugger) Inteligente:**
-    * Integração total com `netcoredbg` via `nvim-dap` e `nvim-dap-ui`.
-    * **Build automático:** O projeto selecionado é compilado antes de iniciar a depuração.
-    * **Seleção de Projeto:** Interface com `telescope.nvim` para escolher qual projeto depurar em soluções com múltiplos projetos.
-    * **Abertura de Navegador:** Inicia o navegador automaticamente para depurar Web APIs.
-* **Terminal Integrado:** Gerenciamento avançado de terminais com `toggleterm.nvim`, com fechamento automático e atalhos intuitivos.
-* **Busca Inteligente:** `telescope.nvim` para buscar arquivos, texto, buffers e mais.
-* **Integração com Git:** `gitsigns.nvim` para visualizar alterações diretamente no editor e realizar ações de hunk.
-* **Interface de Usuário (UI) Sofisticada:**
-    * **Tema:** Dracula com fundo transparente.
-    * **Barra de Status:** `lualine.nvim`.
-    * **Explorador de Arquivos:** `nvim-tree.lua`.
-    * **Ícones:** `nvim-web-devicons`.
-* **Syntax Highlighting:** `nvim-treesitter` para uma coloração de sintaxe mais precisa.
+### 🛠️ Desenvolvimento C#
+* **LSP (IntelliSense):** 
+    * Autocompletar inteligente com `csharp_ls`
+    * Go-to-definition, referências, documentação inline
+    * Code actions e refactoring
+    * Diagnósticos em tempo real
 
----
-## 🚀 Pré-requisitos
+* **Depurador Avançado:**
+    * Build e Debug integrados (`<F5>`)
+    * Interface visual com `nvim-dap-ui`
+    * Breakpoints condicionais
+    * Depuração de Web APIs com auto-abertura do navegador
+    * Build automático antes do debug
+    * Seleção interativa de projetos em soluções multi-projeto
 
-Antes de instalar, é **essencial** garantir que os seguintes programas estejam instalados e acessíveis no seu sistema:
+* **Gerenciamento de Projetos:**
+    * Adição de referências de projeto
+    * Gerenciamento de pacotes NuGet
+    * Execução de testes unitários (`<leader>tt`)
 
-1.  **Neovim (v0.9.0 ou superior)**.
-2.  **Git**.
-3.  **.NET SDK** (Recomendado .NET 8 ou superior).
-4.  **Debugger `netcoredbg` (Instalação Manual para Windows):**
-    * **Passo 1:** Vá para a [página de Releases do netcoredbg no GitHub](https://github.com/Samsung/netcoredbg/releases).
-    * **Passo 2:** Encontre a versão mais recente e, na seção "Assets", baixe o arquivo `netcoredbg-win-x64.zip`.
-    * **Passo 3:** Crie uma pasta chamada `netcoredbg` diretamente no seu disco `C:\`.
-    * **Passo 4:** Extraia **todo o conteúdo** do arquivo `.zip` para dentro da pasta `C:\netcoredbg`.
-    * **Pronto!** A configuração do NeoVini já está apontando para `C:/netcoredbg/netcoredbg.exe`, então o debugger funcionará sem passos adicionais.
-5.  **Nerd Font:** Essencial para os ícones. Recomenda-se a [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads). Após instalar, **configure seu terminal** para usá-la.
-6.  **Ferramentas de Build (Compilador C):** `gcc` e `make` (ou equivalentes no Windows).
-7.  **Utilitários de Busca (Para o Telescope):** `ripgrep` e `fd`.
+### 🎯 Editor
+* **Autocompletar:** 
+    * Suporte a LSP, snippets, paths e buffer
+    * Navegação com Tab/Shift-Tab
+    * Preview de documentação
 
----
-## 📦 Instalação
+* **Treesitter:**
+    * Syntax highlighting avançado
+    * Indentação inteligente
+    * Suporte a C#, Lua, JSON, Markdown
 
-1.  **Faça um backup** da sua configuração atual:
-    ```powershell
-    mv ~/.config/nvim ~/.config/nvim.bak
-    ```
+* **Git:**
+    * Visualização de mudanças inline
+    * Stage/unstage de hunks
+    * Navegação entre mudanças
 
-2.  **Clone este repositório** para a pasta de configuração do Neovim:
-    ```bash
-    git clone <URL_DO_SEU_REPOSITORIO> ~/.config/nvim
-    ```
+### 🖥️ Interface
+* **Tema:** Dracula com fundo transparente
+* **Barra de Status:** Informativa e customizada
+* **Explorador de Arquivos:** Tree-style com ícones
+* **Terminal Integrado:** 
+    * Modos flutuante e vertical
+    * Integração com LazyGit
+    * Auto-fechamento após comandos
 
-3.  **Inicie o Neovim:**
-    ```bash
-    nvim
-    ```
-Na primeira inicialização, `lazy.nvim` irá baixar, instalar e configurar todos os plugins automaticamente. Aguarde o processo terminar e reinicie o Neovim.
+### 🔍 Busca e Navegação
+* **Telescope:**
+    * Busca fuzzy em arquivos
+    * Busca por texto em todo projeto
+    * Seletor de projetos .NET
+    * Live grep
 
----
-## 🕹️ Guia de Uso e Atalhos Principais
+## ⌨️ Atalhos Principais
 
-**Tecla Líder:** A tecla `<leader>` está mapeada para a tecla **`<Espaço>`**.
+### Desenvolvimento
+* `<F5>` - Build e Debug do projeto selecionado
+* `<F10>/<F11>/<F12>` - Step Over/Into/Out
+* `<leader>b` - Toggle breakpoint
+* `<leader>du` - Toggle interface do debugger
+* `<leader>tt` - Rodar testes do projeto
+* `<leader>r` - Rodar projeto sem debug
 
-| Categoria | Atalho | Ação |
-| :--- | :--- | :--- |
-| **🚀 Ações Principais** | | |
-| | `<Espaço> r` | Rodar projeto .NET (abre seletor de .csproj). |
-| | `<F5>` | **Debugar Projeto:** Abre seletor de .csproj, compila e inicia o debug. |
-| | `<C-s>` | Salvar arquivo. |
-| **🪟 Janelas e Buffers** | | |
-| | `<C-j/k/h/l>` | Mover entre janelas (splits). |
-| | `<Espaço> q` | Fechar o buffer (arquivo) atual. |
-| **🔍 Busca (Telescope)** | | |
-| | `<Espaço> ff` | Buscar Arquivos no projeto. |
-| | `<Espaço> fg` | Buscar Texto em todo o projeto. |
-| **🧠 LSP (IntelliSense)** | | |
-| | `gd` | Ir para a Definição. |
-| | `K` | Mostrar Documentação (Hover). |
-| | `<Espaço> ca` | Ver Ações de Código disponíveis. |
-| **🐞 Depurador (DAP)** | | |
-| | `<F10>` / `<F11>` / `<F12>` | Step Over / Step Into / Step Out. |
-| | `<Shift>+<F5>` | Terminar a sessão de debug. |
-| | `<Espaço> b` | Adicionar ou remover um Breakpoint. |
-| | `<Espaço> du` | Mostrar / Esconder a interface do debugger. |
-| **🌿 Git (Gitsigns)** | | |
-| | `]h` / `[h` | Pular para o próximo / anterior bloco de alteração. |
-| | `<Espaço> hs` | Adicionar Hunk ao `git stage`. |
-| | `<Espaço> hr` | Reverter alterações do Hunk. |
-| **💻 Terminal (ToggleTerm)** | | |
-| | `<Espaço> ft` | Abrir/Fechar Terminal Flutuante. |
-| | `<Espaço> vt` | Abrir/Fechar Terminal Vertical. |
-| | `<Espaço> gg` | Abrir/Fechar LazyGit (se instalado). |
-| | `<Esc>` | **No Modo Terminal:** Sair para o Modo Normal. |
-| **✨ UI e Plugins** | | |
-| | `<Espaço> e` | Abrir / Fechar o explorador de arquivos (Nvim-Tree). |
+### Navegação
+* `gd` - Ir para definição
+* `gr` - Ver referências
+* `K` - Mostrar documentação
+* `<leader>ca` - Code actions
+* `<C-j/k/h/l>` - Navegar entre splits
 
----
-## 🎨 Personalização
+### Terminal & Git
+* `<leader>ft` - Terminal flutuante
+* `<leader>vt` - Terminal vertical
+* `]h/[h` - Próxima/anterior mudança git
+* `<leader>hs` - Stage hunk
 
-* **Mudar o Tema:** Edite `lua/plugins/themes.lua`.
-* **Adicionar Plugins:** Crie um novo arquivo `.lua` em `lua/plugins/` com a especificação do `lazy.nvim`.
-* **Mudar Atalhos Gerais:** Edite `lua/core/keymaps.lua`.
-* **Mudar Atalhos de Plugins:** Edite o arquivo do plugin correspondente (ex: `lua/plugins/toggleterm.lua`).
+## 🚀 Instalação
 
----
-## ⚠️ Solução de Problemas (FAQ)
+### Pré-requisitos
+1. Neovim 0.9+
+2. Git
+3. .NET SDK 8+
+4. netcoredbg (debugger)
+5. Node.js
+6. gcc/make
+7. ripgrep & fd
+8. Nerd Font
 
-* **Problema: Ícones aparecem como quadrados.**
-    * **Solução:** Garanta que você instalou uma **Nerd Font** e a configurou como a fonte principal do seu emulador de terminal (Windows Terminal, etc.).
+### Passos
+1. Backup: `mv ~/.config/nvim ~/.config/nvim.bak`
+2. Clone: `git clone <URL_DO_REPO> ~/.config/nvim`
+3. Iniciar: `nvim` (instalação automática dos plugins)
 
-* **Problema: O debugger (`<F5>`) falha ou o processo fecha imediatamente.**
-    * **Causa:** Incompatibilidade entre a versão do .NET do seu projeto e os Runtimes .NET instalados.
-    * **Solução:** Verifique o `<TargetFramework>` no `.csproj` e garanta que a versão correspondente está na lista de `dotnet --list-runtimes`. Se não estiver, instale o **.NET Runtime** ausente.
+## ⚙️ Configuração
 
-* **Problema: Ao depurar, o Swagger retorna 404.**
-    * **Causa:** O debugger iniciou a aplicação em modo de `Production`.
-    * **Solução:** Verifique se a variável `ASPNETCORE_ENVIRONMENT = 'Development'` está definida em `lua/plugins/dap.lua`.
+### Estrutura
+```
+~/.config/nvim/
+├── lua/
+│   ├── core/           # Configurações base
+│   ├── plugins/        # Configurações de plugins
+│   └── utils/         # Funções utilitárias
+└── init.lua          # Arquivo principal
+```
 
-* **Problema: Erro de `module not found` ao iniciar o Neovim.**
-    * **Causa:** Um arquivo de configuração (como `keymaps.lua`) está tentando usar um plugin (`require('toggleterm')`) antes de o `lazy.nvim` tê-lo carregado.
-    * **Solução:** Defina os atalhos de plugins "preguiçosos" usando a propriedade `keys` na sua especificação em `lua/plugins/`, em vez de defini-los globalmente em `keymaps.lua`.
+### Personalização
+* Temas: `lua/plugins/themes.lua`
+* Atalhos: `lua/core/keymaps.lua`
+* LSP/DAP: `lua/plugins/lsp/` e `lua/plugins/dap.lua`
 
-* **Comando Universal de Diagnóstico:**
-    * Dentro do Neovim, execute `:checkhealth`. Ele fornecerá um relatório detalhado sobre possíveis problemas.
+## 🔧 Solução de Problemas
+
+### Debug
+* **Erro 404 no Swagger**: Verifique `ASPNETCORE_ENVIRONMENT='Development'`
+* **Processo fecha imediatamente**: Confirme versão do .NET Runtime
+
+### Visual
+* **Ícones quebrados**: Instale e configure uma Nerd Font
+* **Transparência não funciona**: Verifique configuração do terminal
+
+### Diagnóstico
+* `:checkhealth` - Verificação completa do sistema

@@ -1,17 +1,12 @@
 -- ~/.config/nvim/lua/plugins/themes.lua
-return { -- TEMA DRACULA (NOVO E ATIVO)
+return { -- TEMA DRACULA
 {
     'Mofiqul/dracula.nvim',
-    priority = 1000, -- Garante que o tema seja carregado antes de outros plugins de UI
+    priority = 1000,
     config = function()
         require('dracula').setup({
-            -- Ativa o fundo transparente
             transparent_bg = true,
-
-            -- Mostra nomes de cores em itálico, como 'local' ou 'self'
-            show_end_of_buffer = true, -- Mostra os caracteres '~' no final do buffer
-
-            -- Configurações de integração com outros plugins
+            show_end_of_buffer = true,
             integrations = {
                 cmp = true,
                 gitsigns = true,
@@ -20,50 +15,95 @@ return { -- TEMA DRACULA (NOVO E ATIVO)
                 notify = true,
                 treesitter = true,
                 dap = true
-            }
+            },
+            custom_highlights = function(colors)
+                return {
+                    TelescopeNormal = {
+                        bg = "NONE"
+                    },
+                    TelescopeBorder = {
+                        bg = "NONE"
+                    }
+                }
+            end
         })
-
-        -- Define o Dracula como o esquema de cores padrão ao iniciar
         vim.cmd.colorscheme('dracula')
     end
-}, -- TEMA CATPUCCIN (ANTIGO E DESATIVADO)
--- Nós comentamos o bloco abaixo para que o lazy.nvim não o carregue mais.
---[[
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+}, --------------------------------------------------------------------
+-- TEMA 2: Tokyo Night
+--------------------------------------------------------------------
+{
+    'folke/tokyonight.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
-      require('catppuccin').setup({
-        flavour = 'mocha', -- Outras opções: latte, frappe, macchiato
-        integrations = {
-          cmp = true,
-          gitsigns = true,
-          nvimtree = true,
-          telescope = true,
-          notify = true,
-          treesitter = true,
-          dap = {
-            enabled = true,
-            enable_ui = true, -- Requer nvim-dap-ui
-          },
-        },
-      })
-      -- Define o tema como padrão ao iniciar
-      vim.cmd.colorscheme('catppuccin')
-    end,
-  },
-  ]] --
--- Barra de Status (Lualine)
+        require('tokyonight').setup({
+            style = "night", -- pode ser "storm", "night", ou "moon"
+            transparent = true,
+            on_highlights = function(hl, c)
+                hl.TelescopeNormal = {
+                    bg = "none"
+                }
+                hl.TelescopeBorder = {
+                    bg = "none"
+                }
+            end
+        })
+        -- Para ativar este tema, descomente a linha abaixo e comente as outras
+        -- vim.cmd.colorscheme('tokyonight')
+    end
+}, --------------------------------------------------------------------
+-- TEMA 3: Catppuccin
+--------------------------------------------------------------------
+{
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+        require("catppuccin").setup({
+            flavour = "mocha", -- latte, frappe, macchiato, mocha
+            transparent_background = true,
+            integrations = {
+                telescope = true
+            }
+        })
+        -- Para ativar este tema, descomente a linha abaixo e comente as outras
+        -- vim.cmd.colorscheme "catppuccin"
+    end
+}, --------------------------------------------------------------------
+-- TEMA 4: Gruvbox
+--------------------------------------------------------------------
+{
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
+    config = function()
+        require("gruvbox").setup({
+            transparent_mode = "hard",
+            overrides = {
+                TelescopeNormal = {
+                    bg = "none"
+                }
+            }
+        })
+        -- Para ativar este tema, descomente a linha abaixo e comente as outras
+        -- vim.cmd.colorscheme('gruvbox')
+    end
+}, -- Barra de Status (Lualine)
 {
     'nvim-lualine/lualine.nvim',
     dependencies = {'nvim-tree/nvim-web-devicons'},
     config = function()
         require('lualine').setup({
             options = {
-                -- O Lualine tem um tema dracula integrado que será usado
+                -- MUDANÇA AQUI
                 theme = 'dracula'
-                -- ... outras opções do lualine
+            },
+            sections = {
+                lualine_a = {'mode'},
+                lualine_b = {'branch', 'diff', 'diagnostics'},
+                lualine_x = {'encoding', 'fileformat', 'filetype'},
+                lualine_y = {'progress'},
+                lualine_z = {'location'}
             }
         })
     end

@@ -1,3 +1,4 @@
+-- ~/.config/nvim/lua/plugins/telescope.lua
 return {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
@@ -9,11 +10,30 @@ return {
         telescope.setup({
             defaults = {
                 path_display = {'truncate'},
+
+                -- MAPEAMENTOS CORRIGIDOS E MELHORADOS
                 mappings = {
                     i = {
+                        -- Navegação na lista
                         ['<C-k>'] = actions.move_selection_previous,
                         ['<C-j>'] = actions.move_selection_next,
+
+                        -- Ações de abertura
+                        ['<CR>'] = actions.select_default,
+                        ['<C-x>'] = actions.select_vertical, -- NOVO ATALHO para split vertical
+                        ['<C-s>'] = actions.select_horizontal, -- BÔNUS: atalho para split horizontal
+
+                        -- Outras ações
                         ['<C-q>'] = actions.send_selected_to_qflist + actions.open_qflist
+                    }
+                },
+
+                highlights = {
+                    TelescopeNormal = {
+                        bg = "NONE"
+                    },
+                    TelescopeBorder = {
+                        bg = "NONE"
                     }
                 }
             }
