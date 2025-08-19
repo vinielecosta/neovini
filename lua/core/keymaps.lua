@@ -121,8 +121,8 @@ keymap('n', '<leader>s', function()
     local Input = require('nui.input')
     local Popup = require('nui.popup')
 
-    local function create_input_popup(prompt, on_submit)
-        local input = Input({
+    local function create_input_popup(prompt, opts, on_submit)
+        local options = {
             position = {
                 row = 2,
                 col = '100%'
@@ -130,7 +130,7 @@ keymap('n', '<leader>s', function()
             size = {
                 width = 40
             },
-            enter = true, -- ADIÇÃO CRÍTICA: Entra no modo de inserção automaticamente
+            enter = true,
             border = {
                 style = 'rounded',
                 text = {
@@ -141,12 +141,28 @@ keymap('n', '<leader>s', function()
             win_options = {
                 winhighlight = 'Normal:Normal,FloatBorder:FloatBorder'
             }
-        }, {
+        }
+
+        local input = Input(options, {
             on_close = function()
                 vim.cmd('nohlsearch')
             end,
             on_submit = on_submit
         })
+
+        -- Lógica para destaque em tempo real
+        if opts.live_highlight then
+            input:on({event.BufTextChanged, event.BufEnter}, function()
+                local current_text = input:get_value()
+                if current_text and #current_text > 0 then
+                    vim.fn.setreg('/', vim.pesc(current_text))
+                    vim.cmd('set hlsearch')
+                else
+                    vim.cmd('set nohlsearch')
+                end
+            end)
+        end
+
         input:mount()
         input:map('i', '<esc>', function()
             input:unmount()
@@ -155,12 +171,14 @@ keymap('n', '<leader>s', function()
         })
     end
 
-    create_input_popup('Encontrar: ', function(search_term)
+    create_input_popup('Encontrar: ', {
+        live_highlight = true
+    }, function(search_term)
         if not search_term or search_term == '' then
             return
         end
 
-        create_input_popup('Substituir por: ', function(replace_term)
+        create_input_popup('Substituir por: ', {}, function(replace_term)
             if not replace_term then
                 vim.cmd('nohlsearch');
                 return
@@ -187,6 +205,7 @@ keymap('n', '<leader>s', function()
 
             if #matches == 0 then
                 vim.notify("Palavra '" .. search_term .. "' não encontrada.", vim.log.levels.WARN)
+                vim.cmd('nohlsearch')
                 return
             end
 
@@ -230,7 +249,6 @@ keymap('n', '<leader>s', function()
                     }
                 })
                 confirmation_popup:mount()
-
                 vim.api.nvim_buf_set_lines(confirmation_popup.bufnr, 0, -1, false, {" (y)es / (n)o / (a)ll / (q)uit"})
                 vim.bo[confirmation_popup.bufnr].modifiable = false
 

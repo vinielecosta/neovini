@@ -1,10 +1,14 @@
+-- ~/.config/nvim/lua/plugins/autocompletion.lua
 return {
     'hrsh7th/nvim-cmp',
     dependencies = {'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'L3MON4D3/LuaSnip',
-                    'saadparwaiz1/cmp_luasnip'},
+                    'saadparwaiz1/cmp_luasnip', -- ADICIONADO: A coleção de snippets
+    'rafamadriz/friendly-snippets'},
     config = function()
         local cmp = require('cmp')
         local luasnip = require('luasnip')
+        -- Carrega os snippets da coleção
+        require("luasnip.loaders.from_vscode").lazy_load()
 
         cmp.setup({
             snippet = {
