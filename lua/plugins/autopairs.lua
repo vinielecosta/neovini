@@ -1,23 +1,41 @@
 -- ~/.config/nvim/lua/plugins/autopairs.lua
-return {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter", -- Carrega o plugin assim que você entra no modo de inserção
-    config = function()
-        local autopairs = require('nvim-autopairs')
-        autopairs.setup({
-            -- Não adiciona um par se já houver um caractere "não-palavra" na frente
-            check_ts = true,
-            -- Adiciona um espaço extra ao criar pares para construções como { }
-            ts_config = {
-                lua = {'string'},
-                javascript = {'template_string'},
-                java = false
-            }
-        })
+-- Este ficheiro configura o nvim-autopairs, um plugin que insere
+-- automaticamente o par correspondente de parênteses, chavetas, aspas, etc.
 
-        -- Integração com nvim-cmp para que o autocompletar funcione bem
-        local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-        local cmp = require('cmp')
-        cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
-    end
+return {
+  'windwp/nvim-autopairs',
+  -- O evento 'InsertEnter' garante que o plugin seja carregado de forma preguiçosa,
+  -- apenas na primeira vez que você entra no modo de inserção.
+  event = "InsertEnter",
+  config = function()
+    local autopairs = require('nvim-autopairs')
+    
+    ---
+    -- Título: Configuração Principal
+    ---
+    autopairs.setup({
+      -- Ativa a verificação com o Treesitter para evitar adicionar pares
+      -- em locais inadequados (ex: dentro de uma string ou comentário).
+      check_ts = true,
+      -- Configurações específicas para certas linguagens com Treesitter.
+      ts_config = {
+        lua = { 'string' },
+        javascript = { 'template_string' },
+        java = false,
+      },
+    })
+
+    ---
+    -- Título: Integração com nvim-cmp
+    ---
+    -- Esta secção é crucial para garantir que o autopairs não interfira
+    -- com o comportamento do menu de autocompletar (nvim-cmp).
+    local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+    local cmp = require('cmp')
+    -- Garante que, ao confirmar uma sugestão do cmp, o autopairs se comporte corretamente.
+    cmp.event:on(
+      'confirm_done',
+      cmp_autopairs.on_confirm_done()
+    )
+  end,
 }
