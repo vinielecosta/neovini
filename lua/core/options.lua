@@ -1,34 +1,57 @@
-local opt = vim.opt -- atalho para vim.opt
+-- ~/.config/nvim/lua/core/options.lua
+-- Este ficheiro contém as configurações de base do editor Neovim.
+
+local opt = vim.opt -- Cria um atalho para facilitar a escrita das opções
+
+----------------------------------------------------------------------
+-- NAVEGAÇÃO E VISUALIZAÇÃO
+----------------------------------------------------------------------
 
 -- Numeração de linhas
-opt.relativenumber = true
-opt.number = true
-
--- Tabulação e identação
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
-opt.autoindent = true
-
--- Quebra de linha inteligente
-opt.wrap = false
-
--- Pesquisa
-opt.ignorecase = true
-opt.smartcase = true
+opt.relativenumber = true -- Mostra a numeração relativa à linha atual
+opt.number = true         -- Mostra o número da linha atual
 
 -- Aparência
-opt.termguicolors = true
-opt.signcolumn = 'yes'
-opt.cursorline = true
+opt.termguicolors = true  -- Habilita o suporte completo a cores (essencial para temas)
+opt.signcolumn = 'yes'    -- Mantém a coluna de sinais sempre visível (para Git e erros)
+opt.cursorline = true     -- Destaca a linha onde o cursor está
 
--- Comportamento
-opt.clipboard = 'unnamedplus' -- Sincroniza com a área de transferência do sistema
-opt.splitright = true
-opt.splitbelow = true
+-- Quebra de linha
+opt.wrap = false          -- Impede que linhas longas quebrem visualmente
+
+----------------------------------------------------------------------
+-- EDIÇÃO E INDENTAÇÃO
+----------------------------------------------------------------------
+
+-- Tabulação e indentação
+opt.tabstop = 4           -- Define o tamanho de um Tab para 4 espaços
+opt.shiftwidth = 4        -- Define o tamanho da indentação automática para 4 espaços
+opt.expandtab = true      -- Converte a tecla Tab em espaços
+opt.autoindent = true     -- Indenta novas linhas automaticamente
+
+----------------------------------------------------------------------
+-- PESQUISA
+----------------------------------------------------------------------
+
+-- Comportamento da pesquisa
+opt.ignorecase = true     -- Ignora a diferença entre maiúsculas e minúsculas na pesquisa
+opt.smartcase = true      -- A menos que a sua pesquisa contenha uma letra maiúscula
+
+----------------------------------------------------------------------
+-- COMPORTAMENTO GERAL
+----------------------------------------------------------------------
+
+-- Sincroniza com a área de transferência do sistema
+opt.clipboard = 'unnamedplus'
+
+-- Comportamento da divisão de janelas (splits)
+opt.splitright = true     -- Abre novos splits verticais à direita
+opt.splitbelow = true     -- Abre novos splits horizontais abaixo
+
+-- Desativa ficheiros de backup e swap para uma experiência mais limpa
 opt.swapfile = false
 opt.backup = false
 
--- Tempo de espera para comandos
-opt.timeoutlen = 300
-opt.updatetime = 300
+-- Tempos de resposta da UI
+opt.timeoutlen = 300      -- Tempo de espera para atalhos compostos (em ms)
+opt.updatetime = 300      -- Frequência de atualização para plugins (em ms)
