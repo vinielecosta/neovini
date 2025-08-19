@@ -2,7 +2,6 @@
 return {
     'akinsho/toggleterm.nvim',
     version = "*",
-    -- A propriedade 'keys' define os atalhos que carregarão o plugin sob demanda
     keys = {{
         '<leader>ft',
         "<cmd>ToggleTerm direction=float<CR>",
@@ -19,13 +18,18 @@ return {
         '<leader>gg',
         "<cmd>ToggleTerm direction=float cmd=lazygit<CR>",
         desc = "LazyGit"
+    }, {
+        '<esc>',
+        '<C-\\><C-n>',
+        mode = '',
+        desc = 'Sair do modo terminal'
     }},
-    -- 'config' ainda é usado para configurar o comportamento do plugin
     config = function()
         require('toggleterm').setup({
             close_on_exit = true,
             start_in_insert = true,
-            direction = 'float', -- Direção padrão se nenhuma for especificada
+            shell = "pwsh",
+            direction = 'float',
             float_opts = {
                 border = 'rounded'
             }
