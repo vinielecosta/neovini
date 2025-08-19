@@ -70,38 +70,38 @@ Na primeira inicialização, `lazy.nvim` irá baixar, instalar e configurar todo
 
 **Tecla Líder:** A tecla `<leader>` está mapeada para a tecla **`<Espaço>`**.
 
-| Categoria | Atalho | Ação |
-| :--- | :--- | :--- |
-| **🚀 Ações Principais** | | |
-| | `<Espaço> r` | Rodar projeto .NET (abre seletor de .csproj). |
-| | `<F5>` | **Debugar Projeto:** Abre seletor de .csproj, compila e inicia o debug. |
-| | `<C-s>` | Salvar arquivo. |
-| **🪟 Janelas e Buffers** | | |
-| | `<C-j/k/h/l>` | Mover entre janelas (splits). |
-| | `<Espaço> q` | Fechar o buffer (arquivo) atual. |
-| **🔍 Busca (Telescope)** | | |
-| | `<Espaço> ff` | Buscar Arquivos no projeto. |
-| | `<Espaço> fg` | Buscar Texto em todo o projeto. |
-| **🧠 LSP (IntelliSense)** | | |
-| | `gd` | Ir para a Definição. |
-| | `K` | Mostrar Documentação (Hover). |
-| | `<Espaço> ca` | Ver Ações de Código disponíveis. |
-| **🐞 Depurador (DAP)** | | |
-| | `<F10>` / `<F11>` / `<F12>` | Step Over / Step Into / Step Out. |
-| | `<Shift>+<F5>` | Terminar a sessão de debug. |
-| | `<Espaço> b` | Adicionar ou remover um Breakpoint. |
-| | `<Espaço> du` | Mostrar / Esconder a interface do debugger. |
-| **🌿 Git (Gitsigns)** | | |
-| | `]h` / `[h` | Pular para o próximo / anterior bloco de alteração. |
-| | `<Espaço> hs` | Adicionar Hunk ao `git stage`. |
-| | `<Espaço> hr` | Reverter alterações do Hunk. |
-| **💻 Terminal (ToggleTerm)** | | |
-| | `<Espaço> ft` | Abrir/Fechar Terminal Flutuante. |
-| | `<Espaço> vt` | Abrir/Fechar Terminal Vertical. |
-| | `<Espaço> gg` | Abrir/Fechar LazyGit (se instalado). |
-| | `<Esc>` | **No Modo Terminal:** Sair para o Modo Normal. |
-| **✨ UI e Plugins** | | |
-| | `<Espaço> e` | Abrir / Fechar o explorador de arquivos (Nvim-Tree). |
+| Categoria                   | Atalho                      | Ação                                                                    |
+| :-------------------------- | :-------------------------- | :---------------------------------------------------------------------- |
+| **🚀 Ações Principais**      |                             |                                                                         |
+|                             | `<Espaço> r`                | Rodar projeto .NET (abre seletor de .csproj).                           |
+|                             | `<F5>`                      | **Debugar Projeto:** Abre seletor de .csproj, compila e inicia o debug. |
+|                             | `<C-s>`                     | Salvar arquivo.                                                         |
+| **🪟 Janelas e Buffers**     |                             |                                                                         |
+|                             | `<C-j/k/h/l>`               | Mover entre janelas (splits).                                           |
+|                             | `<Espaço> q`                | Fechar o buffer (arquivo) atual.                                        |
+| **🔍 Busca (Telescope)**     |                             |                                                                         |
+|                             | `<Espaço> ff`               | Buscar Arquivos no projeto.                                             |
+|                             | `<Espaço> fg`               | Buscar Texto em todo o projeto.                                         |
+| **🧠 LSP (IntelliSense)**    |                             |                                                                         |
+|                             | `gd`                        | Ir para a Definição.                                                    |
+|                             | `K`                         | Mostrar Documentação (Hover).                                           |
+|                             | `<Espaço> ca`               | Ver Ações de Código disponíveis.                                        |
+| **🐞 Depurador (DAP)**       |                             |                                                                         |
+|                             | `<F10>` / `<F11>` / `<F12>` | Step Over / Step Into / Step Out.                                       |
+|                             | `<Shift>+<F5>`              | Terminar a sessão de debug.                                             |
+|                             | `<Espaço> b`                | Adicionar ou remover um Breakpoint.                                     |
+|                             | `<Espaço> du`               | Mostrar / Esconder a interface do debugger.                             |
+| **🌿 Git (Gitsigns)**        |                             |                                                                         |
+|                             | `]h` / `[h`                 | Pular para o próximo / anterior bloco de alteração.                     |
+|                             | `<Espaço> hs`               | Adicionar Hunk ao `git stage`.                                          |
+|                             | `<Espaço> hr`               | Reverter alterações do Hunk.                                            |
+| **💻 Terminal (ToggleTerm)** |                             |                                                                         |
+|                             | `<Espaço> ft`               | Abrir/Fechar Terminal Flutuante.                                        |
+|                             | `<Espaço> vt`               | Abrir/Fechar Terminal Vertical.                                         |
+|                             | `<Espaço> gg`               | Abrir/Fechar LazyGit (se instalado).                                    |
+|                             | `<Esc>`                     | **No Modo Terminal:** Sair para o Modo Normal.                          |
+| **✨ UI e Plugins**          |                             |                                                                         |
+|                             | `<Espaço> e`                | Abrir / Fechar o explorador de arquivos (Nvim-Tree).                    |
 
 ---
 ## 🎨 Personalização
