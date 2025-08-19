@@ -86,13 +86,12 @@ end, {
     desc = 'NuGet: Adicionar Pacote Diretamente'
 })
 
----
--- NOVO FLUXO DE TESTES UNITÁRIOS
----
+-- FLUXO DE TESTES UNITÁRIOS ATUALIZADO
 local function run_dotnet_tests()
     require('telescope.builtin').find_files({
         prompt_title = 'Selecione o Projeto de Teste (.csproj)',
-        find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
+        find_command = {'pwsh', '-NoProfile', '-Command',
+                        "Get-ChildItem -Path . -Filter *.csproj -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern '<IsTestProject>true</IsTestProject>' -Quiet } | ForEach-Object { Resolve-Path -Path $_.FullName -Relative }"},
         attach_mappings = function(prompt_bufnr, map)
             local actions = require('telescope.actions')
             local action_state = require('telescope.actions.state')
@@ -101,11 +100,10 @@ local function run_dotnet_tests()
                 local project_path = selection.value
                 actions.close(prompt_bufnr)
 
-                -- Abre um terminal flutuante e executa 'dotnet test'
                 local term = require('toggleterm.terminal').Terminal:new({
                     cmd = 'dotnet test "' .. project_path .. '"',
                     direction = 'float',
-                    close_on_exit = false -- Mantém o terminal aberto para ver os resultados
+                    close_on_exit = false
                 })
                 term:toggle()
             end
@@ -116,13 +114,13 @@ local function run_dotnet_tests()
     })
 end
 
--- FLUXO CORRIGIDO: Encontrar e Substituir com UI customizada
+-- FLUXO REVERTIDO: Encontrar e Substituir com UI customizada
 keymap('n', '<leader>s', function()
     local Input = require('nui.input')
     local Popup = require('nui.popup')
 
-    local function create_input_popup(prompt, opts, on_submit)
-        local options = {
+    local function create_input_popup(prompt, on_submit)
+        local input = Input({
             position = {
                 row = 2,
                 col = '100%'
@@ -141,28 +139,12 @@ keymap('n', '<leader>s', function()
             win_options = {
                 winhighlight = 'Normal:Normal,FloatBorder:FloatBorder'
             }
-        }
-
-        local input = Input(options, {
+        }, {
             on_close = function()
                 vim.cmd('nohlsearch')
             end,
             on_submit = on_submit
         })
-
-        -- Lógica para destaque em tempo real
-        if opts.live_highlight then
-            input:on({event.BufTextChanged, event.BufEnter}, function()
-                local current_text = input:get_value()
-                if current_text and #current_text > 0 then
-                    vim.fn.setreg('/', vim.pesc(current_text))
-                    vim.cmd('set hlsearch')
-                else
-                    vim.cmd('set nohlsearch')
-                end
-            end)
-        end
-
         input:mount()
         input:map('i', '<esc>', function()
             input:unmount()
@@ -171,14 +153,12 @@ keymap('n', '<leader>s', function()
         })
     end
 
-    create_input_popup('Encontrar: ', {
-        live_highlight = true
-    }, function(search_term)
+    create_input_popup('Encontrar: ', function(search_term)
         if not search_term or search_term == '' then
             return
         end
 
-        create_input_popup('Substituir por: ', {}, function(replace_term)
+        create_input_popup('Substituir por: ', function(replace_term)
             if not replace_term then
                 vim.cmd('nohlsearch');
                 return

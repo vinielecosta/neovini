@@ -84,7 +84,7 @@ return { -- TEMA DRACULA
                 }
             end
         })
-        vim.cmd.colorscheme('dracula')
+
     end
 }, --------------------------------------------------------------------
 -- TEMA 2: Tokyo Night
@@ -144,6 +144,29 @@ return { -- TEMA DRACULA
         })
         -- Para ativar este tema, descomente a linha abaixo e comente as outras
         -- vim.cmd.colorscheme('gruvbox')
+    end
+}, --------------------------------------------------------------------
+-- TEMA 5: GitHub (NOVO)
+--------------------------------------------------------------------
+{
+    "projekt0n/github-nvim-theme",
+    lazy = false,
+    priority = 1000,
+    config = function()
+        require("github-theme").setup({
+            options = {
+                transparent = true
+            },
+            integrations = {
+                telescope = true,
+                nvimtree = true
+            }
+        })
+        -- Para ativar este tema, descomente uma das linhas abaixo
+        -- vim.cmd.colorscheme('github_dark')
+        -- vim.cmd.colorscheme('github_light')
+        -- vim.cmd.colorscheme('github_dimmed')
+        vim.cmd.colorscheme('github_dark')
     end
 }, -- Barra de Status (Lualine)
 {
