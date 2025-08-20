@@ -9,7 +9,7 @@ return {
   -- Usar 'keys' garante que a lógica só seja carregada quando o atalho for usado.
   keys = {
     {
-      "<leader><leader>", -- O atalho é Espaço + Espaço.
+      "<leader>p", -- O atalho é Espaço + Espaço.
       function()
         ---
         -- Título: Definição das Ações da Paleta
@@ -119,7 +119,6 @@ return {
               vim.notify("Código formatado!", vim.log.levels.INFO, { title = "NeoVini" })
             end, category = "Codigo" }, -- CORRIGIDO
           { "C#: Inserir Template de Classe", actions.insert_csharp_template, category = "Codigo" }, -- CORRIGIDO
-
           { "Rodar Projeto", actions.run_dotnet_project, category = ".NET" },
           { "Rodar Testes", actions.run_dotnet_tests, category = ".NET" },
           { "NuGet: Adicionar Pacote", function() require('core.nuget').add_package_directly() end, category = ".NET" },
