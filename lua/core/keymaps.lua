@@ -14,11 +14,6 @@ local keymap = vim.keymap.set
 -- Título: Ações Principais e de UI
 ---
 
--- Paleta de Comandos: Atalho principal para aceder à paleta de comandos customizada.
-keymap('n', '<leader><leader>', function()
-  require('core.palette').open()
-end, { desc = "Abrir Paleta de Comandos" })
-
 -- Salvar: Atalho universal para salvar o ficheiro atual.
 keymap('n', '<C-s>', ':w<CR>', { desc = 'Salvar arquivo' })
 
@@ -160,7 +155,6 @@ end, { desc = 'Rodar projeto .NET específico' })
 -- Título: Gestão de Pacotes e Projetos
 ---
 -- Atalhos para acionar os fluxos de trabalho definidos nos módulos 'core.nuget' e 'core.project'.
-keymap('n', '<leader>np', function() require('core.nuget').install_package() end, { desc = 'NuGet: Buscar e Adicionar Pacote' })
 keymap('n', '<leader>na', function() require('core.nuget').add_package_directly() end, { desc = 'NuGet: Adicionar Pacote Diretamente' })
 keymap('n', '<leader>pr', function() require('core.project').add_project_reference() end, { desc = 'Projeto: Adicionar Referência' })
 

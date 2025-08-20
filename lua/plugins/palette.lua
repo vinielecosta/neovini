@@ -9,7 +9,7 @@ return {
   -- Usar 'keys' garante que a lógica só seja carregada quando o atalho for usado.
   keys = {
     {
-      "<leader>p", -- O atalho é Espaço + Espaço.
+      "<leader>p", -- O atalho é Espaço + p
       function()
         ---
         -- Título: Definição das Ações da Paleta
@@ -130,7 +130,7 @@ return {
         -- Mapeamento de categorias para ícones de texto (CORRIGIDO)
         local category_icons = {
           Ficheiros = "[ Ficheiros]",
-          Codigo    = "[ Codigo]", -- CORRIGIDO
+          Codigo    = "[ Código]", -- CORRIGIDO
           [".NET"]  = "[ .NET]",
           Git       = "[ Git]",
         }

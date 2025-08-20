@@ -7,6 +7,7 @@ return {
   'nvim-telescope/telescope.nvim',
   branch = '0.1.x',
   dependencies = { 'nvim-lua/plenary.nvim' }, -- Biblioteca de utilidades Lua.
+  lazy = false, -- O carregamento preguiçoso afeta a inicialização do plugin e dos atalhos. Para melhor experiência, é melhor não usar lazy loading aqui.
   config = function()
     local telescope = require('telescope')
     local actions = require('telescope.actions')
