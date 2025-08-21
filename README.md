@@ -5,8 +5,8 @@
 
 **NeoVini** é uma configuração completa para o Neovim (v0.9+), transformando-o em uma IDE moderna, rápida e poderosa, otimizada para o desenvolvimento de aplicações C# .NET.
 
-![Tela inicial do NeoVini](lua\img\4cbd721f-f883-4791-9c67-a7901e915a03.jpg)
-![Código em C# no NeoVini](lua\img\5a2d5c3b-5667-4a41-9948-650c125ad9ab.jpg)
+![Tela inicial do NeoVini](/lua/img/4cbd721f-f883-4791-9c67-a7901e915a03.jpg)
+![Código em C# no NeoVini](lua/img/5a2d5c3b-5667-4a41-9948-650c125ad9ab.jpg)
 
 ## ✨ Filosofia e Funcionalidades
 
