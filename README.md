@@ -3,6 +3,9 @@
 ![Lua](https://img.shields.io/badge/Made%20with-Lua-blue.svg?style=for-the-badge&logo=lua)
 [![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 
+
+## 📦 Configuração completa, trazendo o melhor do desenvolvimento C# .NET no NeoVim
+
 **NeoVini** é uma configuração completa para o Neovim (v0.9+), transformando-o em uma IDE moderna, rápida e poderosa, otimizada para o desenvolvimento de aplicações C# .NET.
 
 ![Tela inicial do NeoVini](/lua/img/4cbd721f-f883-4791-9c67-a7901e915a03.jpg)
