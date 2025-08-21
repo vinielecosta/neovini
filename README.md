@@ -1,11 +1,12 @@
-# NeoVini - Uma Configuração Neovim para C# .NET
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=2AF767&width=435&lines=NeoVini+-+Uma+Configura%C3%A7%C3%A3o+Neovim%3A;C%23+.NET!)](https://git.io/typing-svg)
 
 ![Lua](https://img.shields.io/badge/Made%20with-Lua-blue.svg?style=for-the-badge&logo=lua)
+[![Neovim](https://img.shields.io/badge/Neovim%200.9+-green.svg?style=for-the-badge&logo=neovim)](https://neovim.io)
 
 **NeoVini** é uma configuração completa para o Neovim (v0.9+), transformando-o em uma IDE moderna, rápida e poderosa, otimizada para o desenvolvimento de aplicações C# .NET.
 
-![Tela inicial do NeoVini](https://i.imgur.com/gKk5H0b.png)
-![Código em C# no NeoVini](https://i.imgur.com/T0bN32E.png)
+![Tela inicial do NeoVini](lua\img\4cbd721f-f883-4791-9c67-a7901e915a03.jpg)
+![Código em C# no NeoVini](lua\img\5a2d5c3b-5667-4a41-9948-650c125ad9ab.jpg)
 
 ## ✨ Filosofia e Funcionalidades
 
