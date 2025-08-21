@@ -178,3 +178,8 @@ keymap('i', 'jk', '<ESC>', { desc = 'Sair do modo de inserção' })
 -- Mantém a seleção visual após a indentação.
 keymap('v', '<', '<gv', { desc = 'Identar para a esquerda (manter seleção)' })
 keymap('v', '>', '>gv', { desc = 'Identar para a direita (manter seleção)' })
+
+---
+-- Modo de visualização "Zen"
+---
+keymap('n', '<leader>z', ':ZenMode<CR>', { desc = 'Ativar modo Zen' })
