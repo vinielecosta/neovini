@@ -48,42 +48,6 @@ return {
           })
         end
 
-        -- Ação para inserir o template de classe C#.
-        function actions.insert_csharp_template()
-          if vim.fn.line('$') == 1 and vim.fn.getline(1) == '' then
-            local filename = vim.api.nvim_buf_get_name(0)
-            if not filename:match('%.cs$') then
-              vim.notify("Arquivo não é .cs. Template não inserido.", vim.log.levels.WARN)
-              return
-            end
-            local class_name = vim.fn.fnamemodify(filename, ':t:r')
-            local sln_file = vim.fn.findfile('.sln', vim.fn.getcwd() .. ';')
-            local namespace
-            if sln_file ~= '' and sln_file ~= nil then
-              local sln_dir = vim.fn.fnamemodify(sln_file, ':p:h')
-              local solution_name = vim.fn.fnamemodify(sln_file, ':t:r')
-              local current_dir = vim.fn.fnamemodify(filename, ':p:h')
-              local relative_path = current_dir:gsub(vim.pesc(sln_dir), ''):gsub('^[\\/]', '')
-              local sub_namespace = relative_path:gsub('[\\/]', '.')
-              if sub_namespace ~= '' then
-                namespace = solution_name .. '.' .. sub_namespace
-              else
-                namespace = solution_name
-              end
-            else
-              namespace = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-            end
-            local template = {
-              'namespace ' .. namespace .. ';', '', 'public class ' .. class_name, '{', '    ', '}',
-            }
-            vim.api.nvim_buf_set_lines(0, 0, -1, false, template)
-            vim.api.nvim_win_set_cursor(0, { 5, 5 })
-            vim.notify("Template de classe C# inserido!", vim.log.levels.INFO)
-          else
-            vim.notify("O arquivo não está vazio. Template não inserido.", vim.log.levels.INFO)
-          end
-        end
-
         -- Ação para rodar um projeto .NET.
         function actions.run_dotnet_project()
           require('telescope.builtin').find_files({
@@ -110,19 +74,13 @@ return {
         -- Título: Lista de Comandos da Paleta
         ---
         local commands = {
-          { "Procurar Ficheiros", function() require('telescope.builtin').find_files() end, category = "Ficheiros" },
-          { "Procurar Texto (Grep)", function() require('telescope.builtin').live_grep() end, category = "Ficheiros" },
-          { "Ver Buffers Abertos", function() require('telescope.builtin').buffers() end, category = "Ficheiros" },
-          
-          { "Formatar Ficheiro", function()
-              vim.lsp.buf.format({ async = true })
-              vim.notify("Código formatado!", vim.log.levels.INFO, { title = "NeoVini" })
-            end, category = "Codigo" }, -- CORRIGIDO
-          { "C#: Inserir Template de Classe", actions.insert_csharp_template, category = "Codigo" }, -- CORRIGIDO
-          { "Rodar Projeto", actions.run_dotnet_project, category = ".NET" },
-          { "Rodar Testes", actions.run_dotnet_tests, category = ".NET" },
-          { "NuGet: Adicionar Pacote", function() require('core.nuget').add_package_directly() end, category = ".NET" },
-          { "Projeto: Adicionar Referência", function() require('core.project_ref').add_project_reference() end, category = ".NET" },
+          { "Find Files", function() require('telescope.builtin').find_files() end, category = "Ficheiros" },
+          { "Find Text (Grep)", function() require('telescope.builtin').live_grep() end, category = "Ficheiros" },
+          { "View Open Buffers", function() require('telescope.builtin').buffers() end, category = "Ficheiros" },
+          { "Run Project", actions.run_dotnet_project, category = ".NET" },
+          { "Run Tests", actions.run_dotnet_tests, category = ".NET" },
+          { "NuGet: Add Package", function() require('core.nuget').add_package_directly() end, category = ".NET" },
+          { "Projeto: Add Reference", function() require('core.project_ref').add_project_reference() end, category = ".NET" },
 
           { "Git (Neogit)", function() require('neogit').open() end, category = "Git" },
         }

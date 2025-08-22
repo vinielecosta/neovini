@@ -34,7 +34,7 @@ return {
       ---
       -- Define os atalhos para interagir com o menu de autocompletar.
       mapping = cmp.mapping.preset.insert({
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- Rola a documentação para cima.
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- Rola a documentação para cima.n
         ['<C-f>'] = cmp.mapping.scroll_docs(4),  -- Rola a documentação para baixo.
         ['<C-Space>'] = cmp.mapping.complete(),      -- Mostra as sugestões de autocompletar.
         ['<C-e>'] = cmp.mapping.abort(),             -- Fecha o menu de autocompletar.
@@ -58,6 +58,35 @@ return {
             luasnip.jump(-1) -- Se estiver dentro de um snippet, salta para o ponto anterior.
           else
             fallback() -- Caso contrário, executa a ação padrão do Shift+Tab.
+          end
+        end, { 'i', 's' }),
+      }),
+      -- Formatação para usar os ícones do neokinds
+      formatting = {
+        format = require('neokinds').menu,
+      },
+      mapping = cmp.mapping.preset.insert({
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
           end
         end, { 'i', 's' }),
       }),
