@@ -1,11 +1,11 @@
 -- ~/.config/nvim/lua/plugins/ui.lua
--- Este ficheiro agrupa os plugins responsáveis pela interface do utilizador (UI).
+-- This file groups plugins responsible for the user interface (UI)
 
 return {  
 
-  ----------------------------------------------------------------------
-  -- github-nvim-theme: Tema principal
-  ----------------------------------------------------------------------
+    ----------------------------------------------------------------------
+    -- github-nvim-theme: Main theme
+    ----------------------------------------------------------------------
     {
         "projekt0n/github-nvim-theme",
         lazy = false,
@@ -13,54 +13,68 @@ return {
         config = function()
         require("github-theme").setup({
             options = {
-            transparent = true,
-            },
-            integrations = {
-            telescope = true,
-            nvimtree = true
-            },
+            transparent = true
+            }
         })
         vim.cmd.colorscheme('github_dark')
         end,
     },
 
     ----------------------------------------------------------------------
-    -- nvim-web-devicons: Ícones para tipos de ficheiro
+    -- nvim-web-devicons: Icons for file types
     ----------------------------------------------------------------------
     {'nvim-tree/nvim-web-devicons'}, 
 
     ----------------------------------------------------------------------
-    -- nvim-tree: Explorador de Ficheiros
+    -- nvim-tree.lua: File Explorer
     ----------------------------------------------------------------------
     {
         'nvim-tree/nvim-tree.lua',
         dependencies = {'nvim-tree/nvim-web-devicons'}, 
         config = function()
             require('nvim-tree').setup({
-                -- Ordena os ficheiros de forma sensível a maiúsculas/minúsculas.
+                -- Sort files in a case-sensitive way
                 sort_by = 'case_sensitive',
-                -- Configurações da janela do explorador.
+                -- File explorer window settings
                 view = {
-                    width = 30 -- Largura da janela em colunas.
+                -- MUDANÇA AQUI: Define a largura como uma tabela para ajuste dinâmico
+                width = {
+                    min = 20, -- Largura mínima
+                    max = 60, -- Largura máxima
                 },
-                -- Configurações de renderização.
+                },
+                -- Rendering settings
                 renderer = {
-                    group_empty = true -- Mostra pastas vazias.
+                    icons = {
+                        show = {
+                            modified = true,
+                        },
+                    },
+                    group_empty = true, -- Show empty folders
+                    full_name = true, -- Show full file names
+                    highlight_modified = "all", -- Highlight files based on git status
                 },
-                -- Filtros para ocultar ficheiros.
+                -- File filters
                 filters = {
-                    dotfiles = false -- Mostra ficheiros ocultos (ex: .gitignore).
+                    dotfiles = false -- Show hidden files (e.g., .gitignore)
                 },
-                -- Configura a ação de apagar para mover ficheiros para a lixeira.
+                hijack_cursor = true, -- Keep the cursor on the first letter of the filename
+                -- Configure delete action to move files to trash
+                modified = {
+                    enable = true
+                },
+                update_focused_file = {
+                    enable = true
+                },
                 trash = {
-                    cmd = "trash" -- Requer um utilitário de lixeira de linha de comando.
+                    cmd = "trash" -- Requires a command-line trash utility
                 }
             })
         end
     }, 
 
     ----------------------------------------------------------------------
-    -- neokinds: Ícones para o meu de autocompletar e diagnósticos
+    -- neokinds: Icons for autocompletion menu and diagnostics
     ----------------------------------------------------------------------
     {
         'thebigcicca/neokinds',
@@ -106,7 +120,7 @@ return {
     }, 
 
     ----------------------------------------------------------------------
-    -- zen-mode: Modo "Zen" para foco total
+    -- zen-mode.nvim: "Zen" mode for total focus
     ----------------------------------------------------------------------
     {
         'folke/zen-mode.nvim',
@@ -116,7 +130,7 @@ return {
     }, 
 
     ----------------------------------------------------------------------
-    -- twilight.nvim: Modo de foco em bloco de código único
+    -- twilight.nvim: Single code block focus mode
     ----------------------------------------------------------------------
     {
         "folke/twilight.nvim",
@@ -129,7 +143,7 @@ return {
     }, 
 
     ----------------------------------------------------------------------
-    -- nvim-lualine: Barra de status personalizável
+    -- lualine.nvim: Customizable status bar
     ----------------------------------------------------------------------
     {
         'nvim-lualine/lualine.nvim',
@@ -137,8 +151,8 @@ return {
         config = function()
             require('lualine').setup({
                 options = {
-                    -- IMPORTANTE: Mude o tema aqui para combinar com o tema ativo.
-                    -- Opções: 'dracula', 'tokyonight', 'catppuccin', 'gruvbox', 'github'.
+                    -- IMPORTANT: Change the theme here to match the active theme.
+                    -- Options: 'dracula', 'tokyonight', 'catppuccin', 'gruvbox', 'github'.
                     theme = 'dracula'
                 },
                 sections = {
@@ -153,7 +167,7 @@ return {
     },
 
     ----------------------------------------------------------------------
-    -- bufferin.nvim: Gerenciador de buffers minimalista (esse bloco configura o bufferin localmente, comente-o caso desejar)
+    -- bufferin.nvim: Minimalist buffer manager (this block configures bufferin locally, comment it out if desired)
     ----------------------------------------------------------------------
     {
         dir = "C:/Users/lucaseb/AppData/Local/nvim-data/lazy/bufferin.nvim",
@@ -175,10 +189,9 @@ return {
         }
     }
 
-    -- Para usar o bufferin.nvim, descomente a seção abaixo.
-
+    -- To use bufferin.nvim, uncomment the section below
     ----------------------------------------------------------------------
-    -- bufferin.nvim: Gerenciador de buffers minimalista
+    -- bufferin.nvim: Minimalist buffer manager
     ----------------------------------------------------------------------
     -- {
     --     'wasabeef/bufferin.nvim',

@@ -30,7 +30,7 @@ return {
       -- Funções que podem ser executadas antes (pre_hook) ou depois (post_hook) da animação.
       pre_hook = nil,
       post_hook = nil,
-      performance_mode = true, -- Desativa a animação se o desempenho for um problema.
+      performance_mode = false, -- Desativa a animação se o desempenho for um problema.
     })
   end,
 }
