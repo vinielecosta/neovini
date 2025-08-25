@@ -105,12 +105,6 @@ return {
         'thebigcicca/neokinds',
         config = function()
             require('neokinds').setup({
-                icons = {
-                    error = "",
-                    warn = "",
-                    hint = "",
-                    info = ""
-                },
                 completion_kinds = {
                     Text = " ",
                     Method = "󰆧",
@@ -149,10 +143,44 @@ return {
     event = "VeryLazy",
     priority = 1000,
     config = function()
-        require('tiny-inline-diagnostic').setup()
+        require('tiny-inline-diagnostic').setup({
+             transparent_bg = false,
+            signs = {
+        left = "",       -- Left border character
+        right = "",      -- Right border character
+        diag = "",       -- Diagnostic indicator character
+        arrow = "    ",   -- Arrow pointing to diagnostic
+        up_arrow = "    ", -- Upward arrow for multiline
+        vertical = " │",   -- Vertical line for multiline
+        vertical_end = " └", -- End of vertical line for multiline  
+    },
+            blend = {
+                factor = 0.1,    -- Transparency factor (0.0 = transparent, 1.0 = opaque)
+            },
+        })
         vim.diagnostic.config({ virtual_text = false }) -- Disable default virtual text
-    end
-},
+        end
+    },
+
+
+    ----------------------------------------------------------------------
+    -- nvim-cokeline: "Zen" mode for total focus
+    ----------------------------------------------------------------------
+    {
+        'willothy/nvim-cokeline',
+        dependencies = {
+            'nvim-tree/nvim-web-devicons', -- Required for file icons
+        },
+        config = function()
+            require('cokeline').setup({
+                default_hl = {
+                    fg = '#999999',
+                    bg = '#1F1F28',
+                },
+
+            })
+        end
+    },
 
     ----------------------------------------------------------------------
     -- zen-mode.nvim: "Zen" mode for total focus
