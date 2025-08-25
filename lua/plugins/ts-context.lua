@@ -6,24 +6,19 @@
 
 return {
   'nvim-treesitter/nvim-treesitter-context',
-  -- Dependências: Garante que o nvim-treesitter seja carregado, pois este plugin depende dele.
   dependencies = 'nvim-treesitter/nvim-treesitter',
   config = function()
     require('treesitter-context').setup({
-      ---
-      -- Título: Configuração Principal
-      ---
-      enable = true, -- Ativa o plugin.
-      max_lines = 3, -- Número máximo de linhas de contexto a serem exibidas.
-      min_window_height = 10, -- Altura mínima da janela para o contexto ser ativado.
-      line_numbers = true, -- Mostra os números das linhas no contexto.
-      trim_scope = 'outer', -- Define como o escopo é cortado.
-
-      ---
-      -- Título: Aparência
-      ---
-      -- Define o caractere a ser usado como separador entre as linhas de contexto.
+      enable = true,
+      max_lines = 3,
+      min_window_height = 10,
+      line_numbers = true,
+      trim_scope = 'outer',
       separator = '─',
     })
+
+    -- Altera a cor do separador para um cinza claro
+    vim.cmd("highlight TreesitterContextSeparator guifg=#DCDCDC guibg=NONE")
+
   end,
 }
