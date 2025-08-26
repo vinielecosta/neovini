@@ -63,10 +63,6 @@ keymap('n', '<leader>q', ':bdelete<CR>', {
 -- Título: Diagnósticos LSP (Erros e Avisos)
 ---
 
--- Ver Diagnóstico: Mostra os detalhes do erro/aviso na linha atual numa janela flutuante.
-keymap('n', '<leader>d', vim.diagnostic.open_float, {
-    desc = 'Mostrar diagnóstico da linha'
-})
 -- Navegar Diagnósticos: Pula para o próximo ou anterior erro/aviso no ficheiro.
 keymap('n', ']d', vim.diagnostic.goto_next, {
     desc = 'Ir para o próximo diagnóstico'
@@ -119,7 +115,7 @@ keymap('n', '<leader>tt', _G.run_dotnet_tests, {
 ---
 -- Atalho para rodar um projeto .NET. Abre o Telescope para selecionar o .csproj e
 -- executa 'dotnet run' num terminal dividido.
-keymap('n', '<leader>r', function()
+keymap('n', '<leader>rp', function()
     require('telescope.builtin').find_files({
         prompt_title = "Run .NET Project",
         find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
@@ -213,11 +209,6 @@ keymap('i', '<C-Left>', '<Esc>bi', {
     desc = 'Mover para o início da palavra'
 })
 
--- Ligar o Bufferin
-vim.keymap.set('n', '<leader>bf', '<cmd>Bufferin<cr>', {
-    desc = 'Toggle Bufferin'
-})
-
 -- Mapeamento para abrir/fechar o Nvim-Tree.
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', {
     desc = 'Abrir/Fechar File Explorer'
@@ -232,7 +223,7 @@ keymap('n', 'gi', vim.lsp.buf.implementation, opts)
 keymap('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 keymap('n', 'gr', vim.lsp.buf.references, opts)
 keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
-keymap('n', '<leader>f', function()
+keymap('n', '<leader>ft', function()
     vim.lsp.buf.format({
         async = true
     })

@@ -55,3 +55,26 @@ opt.backup = false
 -- Tempos de resposta da UI
 opt.timeoutlen = 300      -- Tempo de espera para atalhos compostos (em ms)
 opt.updatetime = 300      -- Frequência de atualização para plugins (em ms)
+
+----------------------------------------------------------------------
+-- CONFIGURAÇÃO DE DIAGNÓSTICO
+----------------------------------------------------------------------
+
+-- Configuração dos ícones de diagnóstico usando o novo método
+vim.diagnostic.config({
+    virtual_text = false,  -- Desativa o texto virtual padrão
+    signs = {
+        priority = 10,
+        text = {
+            [vim.diagnostic.severity.ERROR] = "●",
+            [vim.diagnostic.severity.WARN] = "●",
+            [vim.diagnostic.severity.INFO] = "●",
+            [vim.diagnostic.severity.HINT] = "●"
+        }
+    },
+    float = {
+        border = "rounded",
+        source = "always",
+    },
+    severity_sort = true
+})
