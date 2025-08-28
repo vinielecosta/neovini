@@ -1,4 +1,19 @@
+local function my_on_attach(bufnr)
+    local api = require "nvim-tree.api"
+
+    local function opts(desc)
+        return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    -- default mappings
+    api.config.mappings.default_on_attach(bufnr)
+
+    -- custom mappings
+    vim.keymap.set('n', 'f', "", opts('Up'))
+end
+
 require('nvim-tree').setup({
+    on_attach = my_on_attach,
     -- Sort files in a case-sensitive way
     sort_by = 'case_sensitive',
     -- File explorer window settings
@@ -6,7 +21,7 @@ require('nvim-tree').setup({
         width = {
             min = 20, -- Min width
             max = 60, -- Max width
-        },
+        }
     },
     -- Rendering settings
     renderer = {

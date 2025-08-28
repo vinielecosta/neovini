@@ -3,16 +3,16 @@ return {
     -- UI & Themes
     ----------------------------------------------------------------------
     {
-        "rebelot'/kanagawa.nvim",
+        "rebelot/kanagawa.nvim",
         config = function()
             require("configs.kanagawa")
-            vim.cmd("colorscheme kanagawa") 
+            vim.cmd("colorscheme kanagawa-dragon")
         end
     },
-    {'nvim-tree/nvim-web-devicons'},
+    { 'nvim-tree/nvim-web-devicons' },
     {
         'nvim-tree/nvim-tree.lua',
-        dependencies = {'nvim-tree/nvim-web-devicons'},
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
             require('configs.nvim-tree')
         end
@@ -37,7 +37,7 @@ return {
     },
     {
         'nvim-lualine/lualine.nvim',
-        dependencies = {'nvim-tree/nvim-web-devicons'},
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
             require('configs.lualine')
         end
@@ -92,6 +92,27 @@ return {
             require("configs.which-key")
         end
     },
+    {
+        "andythigpen/nvim-coverage",
+        version = "*",
+        config = function()
+            require("configs.nvim-coverage")
+        end,
+    },
+    -- {
+    -- "nvim-neotest/neotest",
+    --     dependencies = {
+    --         "nvim-neotest/nvim-nio",
+    --         "nvim-lua/plenary.nvim",
+    --         "antoinemadec/FixCursorHold.nvim",
+    --         "nvim-treesitter/nvim-treesitter",
+    --         "Issafalcon/neotest-dotnet",
+    --     },
+    --     config = function()
+    --         -- Ativa o plugin
+    --         require("configs.neotest")
+    --     end
+    -- },
     ----------------------------------------------------------------------
     -- LSP & Completion
     ----------------------------------------------------------------------
@@ -121,27 +142,22 @@ return {
         end
     },
     {
-    "seblyng/roslyn.nvim",
+        "seblyng/roslyn.nvim",
         ---@module 'roslyn.config'
         ---@type RoslynNvimConfig
         opts = {
-            -- your configuration comes here; leave empty for default settings
+                filewatching = "roslyn",
+                silent = true
         },
     },
-    -- {
-    --     "j-hui/fidget.nvim",
-    --     opts = {
-    --         -- options
-    --     },
-    -- },
     {
-    "rachartier/tiny-inline-diagnostic.nvim",
-    event = "VeryLazy",
-    priority = 1000,
-    config = function()
-        require('tiny-inline-diagnostic').setup()
-        vim.diagnostic.config({ virtual_text = false }) -- Disable default virtual text
-    end
+        "rachartier/tiny-inline-diagnostic.nvim",
+        event = "VeryLazy",
+        priority = 1000,
+        config = function()
+            require('tiny-inline-diagnostic').setup()
+            vim.diagnostic.config({ virtual_text = false }) -- Disable default virtual text
+        end
     },
 
     ----------------------------------------------------------------------

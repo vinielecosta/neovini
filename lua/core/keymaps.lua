@@ -94,7 +94,8 @@ _G.run_dotnet_tests = function()
                 local project_path = selection.value
                 actions.close(prompt_bufnr)
                 local term = require('toggleterm.terminal').Terminal:new({
-                    cmd = 'dotnet test "' .. project_path .. '"',
+                    -- LINHA CORRIGIDA AQUI
+                    cmd = 'dotnet test ' .. project_path .. ' --logger "console;verbosity=detailed"',
                     direction = 'float',
                     close_on_exit = false
                 })
@@ -147,7 +148,7 @@ end, {
     desc = 'NuGet: Adicionar Pacote Diretamente'
 })
 keymap('n', '<leader>pr', function()
-    require('core.project').add_project_reference()
+    require('core.project_ref').add_project_reference()
 end, {
     desc = 'Projeto: Adicionar Referência'
 })
@@ -229,3 +230,7 @@ keymap('n', '<leader>ft', function()
     })
 end, opts)
 
+-- Reinicia o servidor Roslyn
+vim.keymap.set('n', '<leader>rr', function()
+  vim.cmd('Roslyn restart')
+end, { desc = 'Restart Roslyn Server' })

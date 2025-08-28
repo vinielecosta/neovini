@@ -7,6 +7,6 @@ require("mason").setup()
 require('mason-lspconfig').setup({
     -- Lista de servidores que o Mason deve garantir que estejam instalados
     ensure_installed = {
-        'lua_ls'
+        'lua_ls',
     },
 })
