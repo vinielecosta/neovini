@@ -3,10 +3,10 @@ require('cokeline').setup({
   show_if_buffers_are_at_least = 1,
   
   default_hl = {
-    bg = "#181616", -- Para o tema Kanagawa, use a cor #1F1F28
-    -- Altere a cor do texto para um valor válido.
-    -- O #c0c0c0 é um cinza claro que combina com o tema.
-    fg = "#c0c0c0",
-    fill_hl = '#1F1F28'
+    bg = function(buffer)
+      local hlgroups = require("cokeline.hlgroups")
+      return buffer.is_focused and hlgroups.get_hl_attr("ColorColumn", "bg")
+        or "#181616" -- Buffer color when unfocused
+    end,
   }
-})
+})  

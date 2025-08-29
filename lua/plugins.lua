@@ -53,6 +53,7 @@ return {
             require("configs.cokeline")
         end,
     },
+    { "rcarriga/nvim-notify" },
 
     ----------------------------------------------------------------------
     -- Development Tools
@@ -83,21 +84,13 @@ return {
             require('configs.indent-lines')
         end
     },
-    -- lua/plugins.lua
     {
         "folke/which-key.nvim",
         event = "VeryLazy", -- Carrega o plugin de forma preguiçosa para não atrasar o início
         config = function()
             -- Ativa o plugin
-            require("configs.which-key")
+            require("which-key")
         end
-    },
-    {
-        "andythigpen/nvim-coverage",
-        version = "*",
-        config = function()
-            require("configs.nvim-coverage")
-        end,
     },
     -- {
     -- "nvim-neotest/neotest",
@@ -132,15 +125,16 @@ return {
         end
     },
     {
-        'williamboman/mason.nvim',
+        'williamboman/mason-lspconfig.nvim',
+        opts = {},
         dependencies = {
-            'williamboman/mason-lspconfig.nvim',
+           {'mason-org/mason.nvim', opts = {}} ,
             'neovim/nvim-lspconfig',
         },
         config = function()
             require('configs.mason')
         end
-    },
+    },  
     {
         "seblyng/roslyn.nvim",
         ---@module 'roslyn.config'

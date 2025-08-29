@@ -22,3 +22,5 @@ vim.api.nvim_create_autocmd('TermClose', {
   -- fazendo com que a janela do terminal desapareça automaticamente.
   command = 'bdelete!',
 })
+
+

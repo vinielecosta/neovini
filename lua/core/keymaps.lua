@@ -220,8 +220,13 @@ keymap('n', 'gd', vim.lsp.buf.definition, opts)
 keymap('n', 'K', vim.lsp.buf.hover, opts)
 keymap('n', 'gi', vim.lsp.buf.implementation, opts)
 
+function saves_before_code_actions_is_called()
+    vim.cmd('write')
+    vim.lsp.buf.code_action()
+end
+
 -- Atalhos de Refatoração e Ações
-keymap('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+keymap('n', '<leader>ca', saves_before_code_actions_is_called, opts)
 keymap('n', 'gr', vim.lsp.buf.references, opts)
 keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
 keymap('n', '<leader>ft', function()
