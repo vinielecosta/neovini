@@ -1,8 +1,8 @@
 require('lualine').setup({
     options = {
         -- IMPORTANT: Change the theme here to match the active theme.
-        -- Options: 'dracula', 'tokyonight', 'catppuccin', 'gruvbox', 'github'.
-        theme = 'kanagawa'
+        -- Options: 'dracula', 'tokyonight', 'catppuccin', 'gruvbox', 'github', 'kanagawa'.
+        theme = 'onedark'
     },
     sections = {
         lualine_a = { 'mode' },

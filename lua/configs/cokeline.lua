@@ -5,8 +5,8 @@ require('cokeline').setup({
   default_hl = {
     bg = function(buffer)
       local hlgroups = require("cokeline.hlgroups")
-      return buffer.is_focused and hlgroups.get_hl_attr("ColorColumn", "bg")
-        or "#181616" -- Buffer color when unfocused
+      return buffer.is_focused and hlgroups.get_hl_attr("ColorColumn", "bg") -- Color when the buffer is focused
+        or "#1F2329" -- Buffer color when unfocused, use #181616 for kanagawa dragon
     end,
   }
 })  

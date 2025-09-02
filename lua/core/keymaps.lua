@@ -55,7 +55,7 @@ keymap('n', '<C-Right>', ':vertical resize +2<CR>', {
 ---
 
 -- Fechar Buffer: Fecha o ficheiro atualmente em foco.
-keymap('n', '<leader>q', ':bdelete<CR>', {
+keymap('n', '<leader>q', ':q<CR>', {
     desc = 'Fechar buffer atual'
 })
 

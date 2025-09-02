@@ -29,7 +29,8 @@ require('toggleterm').setup({
 })
 
 -- Terminal keybindings
-vim.keymap.set('n', '<C-t>', '<Cmd>ToggleTerm direction=horizontal<CR>', { desc = 'Toggle terminal horizontally' })
+-- TODO change keymaps to avoid conflicts
+vim.keymap.set('n', '<C-v>', '<Cmd>ToggleTerm direction=vertical<CR>', { desc = 'Toggle terminal vertically' })
 vim.keymap.set('n', '<C-\\>', '<Cmd>ToggleTerm direction=float<CR>', { desc = 'Toggle floating terminal' })
 vim.keymap.set('t', '<C-t>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', { desc = 'Hide terminal' })
 vim.keymap.set('t', '<C-\\>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', { desc = 'Hide terminal' })

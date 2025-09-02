@@ -6,9 +6,21 @@ return {
         "rebelot/kanagawa.nvim",
         config = function()
             require("configs.kanagawa")
-            vim.cmd("colorscheme kanagawa-dragon")
+            -- vim.cmd("colorscheme kanagawa-dragon")
         end
     },
+    -- Using Lazy
+    {
+    "navarasu/onedark.nvim",
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+        require('onedark').setup {
+        style = 'darker'
+        }
+        -- Enable theme
+        vim.cmd("colorscheme onedark")
+    end
+},
     { 'nvim-tree/nvim-web-devicons' },
     {
         'nvim-tree/nvim-tree.lua',
@@ -54,8 +66,7 @@ return {
         end,
     },
     { "rcarriga/nvim-notify" },
-
-    ----------------------------------------------------------------------
+    -------------------------------------------------------------
     -- Development Tools
     ----------------------------------------------------------------------
     {
@@ -92,20 +103,7 @@ return {
             require("which-key")
         end
     },
-    -- {
-    -- "nvim-neotest/neotest",
-    --     dependencies = {
-    --         "nvim-neotest/nvim-nio",
-    --         "nvim-lua/plenary.nvim",
-    --         "antoinemadec/FixCursorHold.nvim",
-    --         "nvim-treesitter/nvim-treesitter",
-    --         "Issafalcon/neotest-dotnet",
-    --     },
-    --     config = function()
-    --         -- Ativa o plugin
-    --         require("configs.neotest")
-    --     end
-    -- },
+
     ----------------------------------------------------------------------
     -- LSP & Completion
     ----------------------------------------------------------------------

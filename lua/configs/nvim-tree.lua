@@ -10,6 +10,7 @@ local function my_on_attach(bufnr)
 
     -- custom mappings
     vim.keymap.set('n', 'f', "", opts('Up'))
+    vim.keymap.set('n', '<C-x>', api.node.open.vertical, opts('Open: Vertical Split'))
 end
 
 require('nvim-tree').setup({
