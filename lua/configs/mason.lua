@@ -12,10 +12,19 @@ require("mason").setup({
     }
 })
 
+-- lspconfig.lua
+
 -- Inicializa o mason-lspconfig, a ponte entre o Mason e o lspconfig
 require('mason-lspconfig').setup({
     -- Lista de servidores que o Mason deve garantir que estejam instalados
     ensure_installed = {
-        'lua_ls',
+        'lua_ls',"biome"
     },
+    automatic_enable = {
+        "lua_ls",
+        "roslyn,"
+    }
 })
+
+
+

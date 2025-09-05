@@ -5,12 +5,12 @@ require('gitsigns').setup({
     -- Defines the icons that will appear in the gutter for each type of change.
     -- Requires a Nerd Font to display correctly.
     signs = {
-        add          = { text = '▎' },
-        change       = { text = '▎' },
+        add          = { text = '󰐕' },
+        change       = { text = '󰜥' },
         delete       = { text = '' },
         topdelete    = { text = '' },
-        changedelete = { text = '▎' },
-        untracked    = { text = '▎' },
+        changedelete = { text = '' },
+        untracked    = { text = '' },
     },
     ---
     -- Title: Keyboard Shortcuts (on_attach)

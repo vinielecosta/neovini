@@ -17,10 +17,19 @@ return {
         require('onedark').setup {
         style = 'darker'
         }
-        -- Enable theme
-        vim.cmd("colorscheme onedark")
     end
-},
+    },
+    {
+      'sainnhe/sonokai',
+      lazy = false,
+      priority = 1000,
+      config = function()
+        -- Optionally configure and load the colorscheme
+        -- directly inside the plugin declaration.
+        vim.g.sonokai_enable_italic = true
+        vim.cmd.colorscheme('sonokai')
+      end
+    },
     { 'nvim-tree/nvim-web-devicons' },
     {
         'nvim-tree/nvim-tree.lua',
@@ -65,6 +74,11 @@ return {
             require("configs.cokeline")
         end,
     },
+    {
+        "NStefan002/screenkey.nvim",
+        lazy = false,
+        version = "*", -- or branch = "main", to use the latest commit
+    },
     { "rcarriga/nvim-notify" },
     -------------------------------------------------------------
     -- Development Tools
@@ -103,7 +117,6 @@ return {
             require("which-key")
         end
     },
-
     ----------------------------------------------------------------------
     -- LSP & Completion
     ----------------------------------------------------------------------
@@ -221,6 +234,13 @@ return {
         config = function()
             require('configs.boilersharp')
         end
+    },
+    {
+        "VPavliashvili/json-nvim",
+        config = function()
+            vim.keymap.set("n", "<leader>jf", '<cmd>JsonFormatFile<cr>')
+            vim.keymap.set("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>')
+        end,
     },
 
     ----------------------------------------------------------------------

@@ -84,8 +84,8 @@ keymap('n', '[d', vim.diagnostic.goto_prev, {
 _G.run_dotnet_tests = function()
     require('telescope.builtin').find_files({
         prompt_title = 'Selecione o Projeto de Teste (.csproj)',
-        find_command = {'pwsh', '-NoProfile', '-Command',
-                        "Get-ChildItem -Path . -Filter *.csproj -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern '<IsTestProject>true</IsTestProject>' -Quiet } | ForEach-Object { Resolve-Path -Path $_.FullName -Relative }"},
+        find_command = { 'pwsh', '-NoProfile', '-Command',
+            "Get-ChildItem -Path . -Filter *.csproj -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern '<IsTestProject>true</IsTestProject>' -Quiet } | ForEach-Object { Resolve-Path -Path $_.FullName -Relative }" },
         attach_mappings = function(prompt_bufnr, map)
             local actions = require('telescope.actions')
             local action_state = require('telescope.actions.state')
@@ -119,7 +119,7 @@ keymap('n', '<leader>tt', _G.run_dotnet_tests, {
 keymap('n', '<leader>rp', function()
     require('telescope.builtin').find_files({
         prompt_title = "Run .NET Project",
-        find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
+        find_command = { 'fd', '--type', 'f', '--glob', '*.csproj' },
         attach_mappings = function(prompt_bufnr, map)
             local actions = require('telescope.actions')
             local action_state = require('telescope.actions.state')
@@ -182,7 +182,7 @@ keymap('v', '>', '>gv', {
     desc = 'Identar para a direita (manter seleção)'
 })
 
---- 
+---
 -- Modo de visualização "Zen"
 ---
 keymap('n', '<leader>z', ':ZenMode<CR>', {
@@ -235,7 +235,11 @@ keymap('n', '<leader>ft', function()
     })
 end, opts)
 
+-- -- Set Keymap for interacting with screenkey
+-- vim.keymap.set("n", "<leader>ts", "<cmd>Screenkey toggle_statusline_component<CR>", { desc = "Toggle screenkey statusline component" })
+
 -- Reinicia o servidor Roslyn
 vim.keymap.set('n', '<leader>rr', function()
-  vim.cmd('Roslyn restart')
+    vim.cmd('Roslyn restart')
 end, { desc = 'Restart Roslyn Server' })
+ 
