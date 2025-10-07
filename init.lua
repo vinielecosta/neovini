@@ -19,20 +19,19 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 ----------------------------------------------------------------------
--- Lazy.nvim Initialization
+-- Lazy.nvim and plugins Initialization
 ----------------------------------------------------------------------
 
-require('lazy').setup('plugins', {
+require('lazy').setup('core.plugins', {
     change_detection = {
         notify = true -- Enables automatic notifications about plugin changes.
     }
 })
 
 ----------------------------------------------------------------------
--- Loading Core and plugin configurations
+-- Loading Core configurations
 ----------------------------------------------------------------------
 
-require('core')
-require('plugins')
+require('core_startup')
 
 

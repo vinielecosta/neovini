@@ -17,7 +17,7 @@ opt.signcolumn = 'yes'    -- Mantém a coluna de sinais sempre visível (para Gi
 opt.cursorline = true     -- Destaca a linha onde o cursor está
 
 -- Quebra de linha
-opt.wrap = false          -- Impede que linhas longas quebrem visualmente
+opt.wrap = true          -- Impede que linhas longas quebrem visualmente
 
 ----------------------------------------------------------------------
 -- EDIÇÃO E INDENTAÇÃO

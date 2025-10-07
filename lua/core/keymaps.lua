@@ -235,11 +235,12 @@ keymap('n', '<leader>ft', function()
     })
 end, opts)
 
--- -- Set Keymap for interacting with screenkey
--- vim.keymap.set("n", "<leader>ts", "<cmd>Screenkey toggle_statusline_component<CR>", { desc = "Toggle screenkey statusline component" })
-
 -- Reinicia o servidor Roslyn
 vim.keymap.set('n', '<leader>rr', function()
     vim.cmd('Roslyn restart')
 end, { desc = 'Restart Roslyn Server' })
+
+-- Json format keympas
+vim.keymap.set("n", "<leader>jf", '<cmd>JsonFormatFile<cr>')
+vim.keymap.set("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>')
  
