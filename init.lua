@@ -32,6 +32,8 @@ require('lazy').setup('core.plugins', {
 -- Loading Core configurations
 ----------------------------------------------------------------------
 
-require('core_startup')
-
+require("core.keymaps")
+require("core.options")
+require("core.dotnet.add-package")
+require("core.dotnet.add-reference")
 

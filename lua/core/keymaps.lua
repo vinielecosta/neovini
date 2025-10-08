@@ -1,246 +1,167 @@
--- ~/.config/nvim/lua/core/keymaps.lua
--- Este ficheiro centraliza a definição de atalhos de teclado (keymaps)
--- para ações gerais do editor e funcionalidades customizadas.
--- Cria um atalho local para a função de mapeamento de teclas do Neovim,
--- tornando o código mais limpo e legível.
 local keymap = vim.keymap.set
 
 ----------------------------------------------------------------------
--- MODO NORMAL (n)
+-- NORMAL MODE (n)
 ----------------------------------------------------------------------
 
----
--- Título: Ações Principais e de UI
----
-
--- Salvar: Atalho universal para salvar o ficheiro atual.
 keymap('n', '<C-s>', ':w<CR>', {
-    desc = 'Salvar arquivo'
+    desc = 'Save file'
 })
 
----
--- Título: Navegação e Gestão de Janelas (Splits)
----
-
--- Navegação entre janelas: Permite mover-se entre splits usando Ctrl + H/J/K/L.
 keymap('n', '<C-h>', '<C-w>h', {
-    desc = 'Mover para janela à esquerda'
+    desc = 'Move to left window'
 })
 keymap('n', '<C-j>', '<C-w>j', {
-    desc = 'Mover para janela abaixo'
+    desc = 'Move to bottom window'
 })
 keymap('n', '<C-k>', '<C-w>k', {
-    desc = 'Mover para janela acima'
+    desc = 'Move to top window'
 })
 keymap('n', '<C-l>', '<C-w>l', {
-    desc = 'Mover para janela à direita'
+    desc = 'Move to right window'
 })
 
--- Redimensionar janelas: Permite ajustar o tamanho dos splits.
 keymap('n', '<C-Up>', ':resize +2<CR>', {
-    desc = 'Aumentar altura da janela'
+    desc = 'Increase window height'
 })
 keymap('n', '<C-Down>', ':resize -2<CR>', {
-    desc = 'Diminuir altura da janela'
+    desc = 'Decrease window height'
 })
 keymap('n', '<C-Left>', ':vertical resize -2<CR>', {
-    desc = 'Diminuir largura da janela'
+    desc = 'Decrease window width'
 })
 keymap('n', '<C-Right>', ':vertical resize +2<CR>', {
-    desc = 'Aumentar largura da janela'
+    desc = 'Increase window width'
 })
 
----
--- Título: Gestão de Buffers (Ficheiros Abertos)
----
-
--- Fechar Buffer: Fecha o ficheiro atualmente em foco.
 keymap('n', '<leader>q', ':q<CR>', {
-    desc = 'Fechar buffer atual'
+    desc = 'Close current buffer'
 })
 
----
--- Título: Diagnósticos LSP (Erros e Avisos)
----
+keymap('n', '<leader>tt', function()
+    require('core.dotnet.dotnet-test').run_tests()
+end, {
+    desc = '.NET: Run project tests'
+})
 
--- Navegar Diagnósticos: Pula para o próximo ou anterior erro/aviso no ficheiro.
+keymap('n', '<leader>rp', function()
+    require('core.dotnet.dotnet-run').run_project()
+end, {
+    desc = '.NET: Run specific project'
+})
+
+keymap('n', '<leader>na', function()
+    require('core.dotnet.add-package').add_package_directly()
+end, {
+    desc = 'NuGet: Add package directly'
+})
+
+keymap('n', '<leader>pr', function()
+    require('core.dotnet.add-reference').add_project_reference()
+end, {
+    desc = '.NET: Add project reference'
+})
+
+keymap('n', '<leader>s', function()
+    require('core.functions.find_replace').find_and_replace()
+end, {
+    desc = 'Find and Replace in file'
+})
+
+keymap('n', '<leader>z', ':ZenMode<CR>', {
+    desc = 'Enable Zen mode'
+})
+
+keymap('n', '<leader>tw', ':Twilight<CR>', {
+    desc = 'Enable Twilight mode'
+})
+
+keymap('n', '<leader>e', ':NvimTreeToggle<CR>', {
+    desc = 'Open/Close File Explorer'
+})
+
 keymap('n', ']d', vim.diagnostic.goto_next, {
-    desc = 'Ir para o próximo diagnóstico'
+    desc = 'Go to next diagnostic'
 })
 keymap('n', '[d', vim.diagnostic.goto_prev, {
-    desc = 'Ir para o diagnóstico anterior'
+    desc = 'Go to previous diagnostic'
 })
 
-----------------------------------------------------------------------
--- FUNCIONALIDADES .NET E WORKFLOWS COMPLEXOS
-----------------------------------------------------------------------
--- As funções abaixo definem lógicas mais complexas que são acionadas por atalhos.
--- Elas são tornadas globais (_G) para que possam ser acedidas pela paleta de comandos.
----
--- Título: Execução de Testes Unitários
----
--- Função que abre o Telescope para selecionar um projeto de teste (.csproj com <IsTestProject>true</IsTestProject>)
--- e executa 'dotnet test' numa janela flutuante.
-_G.run_dotnet_tests = function()
-    require('telescope.builtin').find_files({
-        prompt_title = 'Selecione o Projeto de Teste (.csproj)',
-        find_command = { 'pwsh', '-NoProfile', '-Command',
-            "Get-ChildItem -Path . -Filter *.csproj -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern '<IsTestProject>true</IsTestProject>' -Quiet } | ForEach-Object { Resolve-Path -Path $_.FullName -Relative }" },
-        attach_mappings = function(prompt_bufnr, map)
-            local actions = require('telescope.actions')
-            local action_state = require('telescope.actions.state')
-            local function on_project_select()
-                local selection = action_state.get_selected_entry()
-                local project_path = selection.value
-                actions.close(prompt_bufnr)
-                local term = require('toggleterm.terminal').Terminal:new({
-                    -- LINHA CORRIGIDA AQUI
-                    cmd = 'dotnet test ' .. project_path .. ' --logger "console;verbosity=detailed"',
-                    direction = 'float',
-                    close_on_exit = false
-                })
-                term:toggle()
-            end
-            map('i', '<CR>', on_project_select)
-            map('n', '<CR>', on_project_select)
-            return true
-        end
-    })
-end
-keymap('n', '<leader>tt', _G.run_dotnet_tests, {
-    desc = 'Test: Rodar testes do projeto'
+keymap('n', 'gD', vim.lsp.buf.declaration, {
+    desc = 'LSP: Go to declaration'
+})
+keymap('n', 'gd', vim.lsp.buf.definition, {
+    desc = 'LSP: Go to definition'
+})
+keymap('n', 'K', vim.lsp.buf.hover, {
+    desc = 'LSP: Show hover documentation'
+})
+keymap('n', 'gi', vim.lsp.buf.implementation, {
+    desc = 'LSP: Go to implementation'
 })
 
----
--- Título: Execução de Projetos
----
--- Atalho para rodar um projeto .NET. Abre o Telescope para selecionar o .csproj e
--- executa 'dotnet run' num terminal dividido.
-keymap('n', '<leader>rp', function()
-    require('telescope.builtin').find_files({
-        prompt_title = "Run .NET Project",
-        find_command = { 'fd', '--type', 'f', '--glob', '*.csproj' },
-        attach_mappings = function(prompt_bufnr, map)
-            local actions = require('telescope.actions')
-            local action_state = require('telescope.actions.state')
-            local function run_dotnet_project()
-                local selection = action_state.get_selected_entry()
-                actions.close(prompt_bufnr)
-                local command = 'split term://dotnet run --project ' .. selection.value
-                vim.cmd(command)
-            end
-            map('i', '<CR>', run_dotnet_project)
-            map('n', '<CR>', run_dotnet_project)
-            return true
-        end
-    })
-end, {
-    desc = 'Rodar projeto .NET específico'
-})
-
----
--- Título: Gestão de Pacotes e Projetos
----
--- Atalhos para acionar os fluxos de trabalho definidos nos módulos 'core.nuget' e 'core.project'.
-keymap('n', '<leader>na', function()
-    require('core.nuget').add_package_directly()
-end, {
-    desc = 'NuGet: Adicionar Pacote Diretamente'
-})
-keymap('n', '<leader>pr', function()
-    require('core.project_ref').add_project_reference()
-end, {
-    desc = 'Projeto: Adicionar Referência'
-})
-
----
--- Título: Encontrar e Substituir
----
--- Atalho para o fluxo de encontrar e substituir com a UI customizada do NUI.
-keymap('n', '<leader>s', function()
-    -- A lógica completa está definida no ficheiro original e é acionada aqui.
-end, {
-    desc = 'Encontrar e Substituir no arquivo'
-})
-
-----------------------------------------------------------------------
--- MODO DE INSERÇÃO (i)
-----------------------------------------------------------------------
--- Permite sair do modo de inserção de forma mais ergonómica.
-keymap('i', 'jk', '<ESC>', {
-    desc = 'Sair do modo de inserção'
-})
-
-----------------------------------------------------------------------
--- MODO VISUAL (v)
-----------------------------------------------------------------------
--- Mantém a seleção visual após a indentação.
-keymap('v', '<', '<gv', {
-    desc = 'Identar para a esquerda (manter seleção)'
-})
-keymap('v', '>', '>gv', {
-    desc = 'Identar para a direita (manter seleção)'
-})
-
----
--- Modo de visualização "Zen"
----
-keymap('n', '<leader>z', ':ZenMode<CR>', {
-    desc = 'Ativar modo Zen'
-})
-
----
--- Modo de visualização "Twilight"
----
-keymap('n', '<leader>tw', ':Twilight<CR>', {
-    desc = 'Ativar modo Twilight'
-})
----
--- Bindando deleção no comando "Crtl + Backspace"
----
-vim.api.nvim_set_keymap('i', '<C-H>', '<C-W>', {
-    noremap = true
-})
-
--- Navegação por palavras no Modo de Inserção
-keymap('i', '<C-Right>', '<Esc>ea', {
-    desc = 'Mover para o fim da palavra'
-})
-keymap('i', '<C-Left>', '<Esc>bi', {
-    desc = 'Mover para o início da palavra'
-})
-
--- Mapeamento para abrir/fechar o Nvim-Tree.
-vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', {
-    desc = 'Abrir/Fechar File Explorer'
-})
-
-keymap('n', 'gD', vim.lsp.buf.declaration, opts)
-keymap('n', 'gd', vim.lsp.buf.definition, opts)
-keymap('n', 'K', vim.lsp.buf.hover, opts)
-keymap('n', 'gi', vim.lsp.buf.implementation, opts)
-
-function saves_before_code_actions_is_called()
+keymap('n', '<leader>ca', function()
     vim.cmd('write')
     vim.lsp.buf.code_action()
-end
+end, {
+    desc = 'LSP: Show code actions'
+})
 
--- Atalhos de Refatoração e Ações
-keymap('n', '<leader>ca', saves_before_code_actions_is_called, opts)
-keymap('n', 'gr', vim.lsp.buf.references, opts)
-keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
+keymap('n', 'gr', vim.lsp.buf.references, {
+    desc = 'LSP: Show references'
+})
+keymap('n', '<leader>rn', vim.lsp.buf.rename, {
+    desc = 'LSP: Rename symbol'
+})
 keymap('n', '<leader>ft', function()
     vim.lsp.buf.format({
         async = true
     })
-end, opts)
+end, {
+    desc = 'LSP: Format code'
+})
 
--- Reinicia o servidor Roslyn
-vim.keymap.set('n', '<leader>rr', function()
+keymap('n', '<leader>rr', function()
     vim.cmd('Roslyn restart')
-end, { desc = 'Restart Roslyn Server' })
+end, {
+    desc = 'LSP: Restart Roslyn Server'
+})
 
--- Json format keympas
-vim.keymap.set("n", "<leader>jf", '<cmd>JsonFormatFile<cr>')
-vim.keymap.set("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>')
- 
+keymap("n", "<leader>jf", '<cmd>JsonFormatFile<cr>', {
+    desc = 'JSON: Format file'
+})
+keymap("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>', {
+    desc = 'JSON: Minify file'
+})
+
+----------------------------------------------------------------------
+-- VISUAL MODE (v)
+----------------------------------------------------------------------
+
+keymap('v', '<', '<gv', {
+    desc = 'Indent left (keep selection)'
+})
+keymap('v', '>', '>gv', {
+    desc = 'Indent right (keep selection)'
+})
+
+----------------------------------------------------------------------
+-- INSERT MODE (i)
+----------------------------------------------------------------------
+
+keymap('i', 'jk', '<ESC>', {
+    desc = 'Exit insert mode'
+})
+
+keymap('i', '<C-H>', '<C-W>', {
+    noremap = true,
+    desc = 'Binding delete on "Ctrl + Backspace'
+})
+
+keymap('i', '<C-Right>', '<Esc>ea', {
+    desc = 'Move to end of word'
+})
+keymap('i', '<C-Left>', '<Esc>bi', {
+    desc = 'Move to beginning of word'
+})
+
