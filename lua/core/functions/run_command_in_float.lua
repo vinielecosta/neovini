@@ -1,7 +1,7 @@
 local M = {}
 
-local function run_command_in_float(command, title, success_msg, failure_msg)
-
+function M.run_command_in_float(command, title, success_msg, failure_msg)
+    -- Create floating buffer
     local buf = vim.api.nvim_create_buf(false, true)
 
     local width = math.floor(vim.api.nvim_get_option('columns') * 0.8)

@@ -62,6 +62,12 @@ end, {
     desc = '.NET: Add project reference'
 })
 
+keymap('n', '<leader>dn', function()
+    require('core.dotnet.dotnet-new').create_project()
+end, {
+    desc = '.NET: Create new project'
+})
+
 keymap('n', '<leader>s', function()
     require('core.functions.find_replace').find_and_replace()
 end, {
