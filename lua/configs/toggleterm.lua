@@ -22,15 +22,13 @@ require('toggleterm').setup({
     -- Float settings
     float_opts = {
         border = 'curved',
-        width = function() return math.floor(vim.o.columns * 0.85) end,
-        height = function() return math.floor(vim.o.lines * 0.8) end,
-        winblend = 3,
-    },
+        width = function()
+            return math.floor(vim.o.columns * 0.85)
+        end,
+        height = function()
+            return math.floor(vim.o.lines * 0.8)
+        end,
+        winblend = 3
+    }
 })
 
--- Terminal keybindings
--- TODO change keymaps to avoid conflicts
-vim.keymap.set('n', '<C-v>', '<Cmd>ToggleTerm direction=vertical<CR>', { desc = 'Toggle terminal vertically' })
-vim.keymap.set('n', '<C-\\>', '<Cmd>ToggleTerm direction=float<CR>', { desc = 'Toggle floating terminal' })
-vim.keymap.set('t', '<C-t>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', { desc = 'Hide terminal' })
-vim.keymap.set('t', '<C-\\>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', { desc = 'Hide terminal' })

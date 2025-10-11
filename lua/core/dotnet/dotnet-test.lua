@@ -27,7 +27,6 @@ function M.run_tests()
                 local project_path = selection.value
                 actions.close(prompt_bufnr)
                 
-                -- Notify user that tests are starting
                 vim.notify("Running tests for " .. vim.fn.fnamemodify(project_path, ":t"), vim.log.levels.INFO)
                 
                 local term = require('toggleterm.terminal').Terminal:new({

@@ -2,7 +2,6 @@ local M = {}
 
 local float_runner = require('core.functions.run_command_in_float')
 
--- List of valid .NET project templates
 local project_templates = {
     webapi = "webapi",
     console = "console",
@@ -15,19 +14,15 @@ local project_templates = {
     mstest = "mstest",
 }
 
--- Function to get available templates
 function M.list_templates()
     return vim.tbl_keys(project_templates)
 end
 
--- Function to validate project name
 local function validate_project_name(name)
-    -- Check if name is empty or nil
     if not name or name == "" then
         return false, "Project name cannot be empty"
     end
 
-    -- Check if name follows C# naming conventions
     if not name:match("^[%a_][%w_]*$") then
         return false, "Invalid project name. Must start with letter or underscore and contain only letters, numbers, and underscores"
     end
@@ -35,9 +30,7 @@ local function validate_project_name(name)
     return true, nil
 end
 
--- Function to create a new .NET project
 function M.create_project()
-    -- First, prompt for project type
     vim.ui.select(M.list_templates(), {
         prompt = "Select project type:",
         format_item = function(item)
@@ -46,20 +39,17 @@ function M.create_project()
     }, function(project_type)
         if not project_type then return end
 
-        -- Then, prompt for project name
         vim.ui.input({
             prompt = "Enter project name: ",
         }, function(project_name)
             if not project_name then return end
 
-            -- Validate project name
             local valid, err = validate_project_name(project_name)
             if not valid then
                 vim.notify(err, vim.log.levels.ERROR)
                 return
             end
 
-            -- Create the project
             local command = string.format('dotnet new %s -n "%s" --framework net8.0', project_type, project_name)
             float_runner.run_command_in_float(
                 command,
@@ -68,7 +58,6 @@ function M.create_project()
                 'Failed to create project ' .. project_name
             )
 
-            -- After project creation, check if user wants to open it
             vim.defer_fn(function()
                 vim.ui.select({'Yes', 'No'}, {
                     prompt = "Open project in new window?"

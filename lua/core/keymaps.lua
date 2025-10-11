@@ -140,6 +140,18 @@ keymap("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>', {
     desc = 'JSON: Minify file'
 })
 
+keymap('n', '<leader>vt', '<Cmd>ToggleTerm direction=vertical<CR>', {
+    desc = 'Toggle terminal vertically'
+})
+
+keymap('n', '<leader>ht', '<Cmd>ToggleTerm direction=horizontal<CR>', {
+    desc = 'Toggle terminal horizontally'
+})
+
+keymap('n', '<C-a>', '<Cmd>Alpha<CR>', {
+    desc = 'Show Alpha'
+})
+
 ----------------------------------------------------------------------
 -- VISUAL MODE (v)
 ----------------------------------------------------------------------
@@ -169,5 +181,13 @@ keymap('i', '<C-Right>', '<Esc>ea', {
 })
 keymap('i', '<C-Left>', '<Esc>bi', {
     desc = 'Move to beginning of word'
+})
+
+----------------------------------------------------------------------
+-- TERMINAL MODE (t)
+----------------------------------------------------------------------
+
+keymap('t', '<C-t>', '<Cmd>ToggleTerm<CR>', {
+    desc = 'Hide terminal'
 })
 
