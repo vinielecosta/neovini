@@ -2,7 +2,7 @@ local M = {}
 
 local float_runner = require('core.functions.run_command_in_float')
 
-function M.select_project(callback)
+local function select_project(callback)
     require('telescope.builtin').find_files({
         prompt_title = 'Selecione o Projeto (.csproj)',
         find_command = {'fd', '--type', 'f', '--glob', '*.csproj'},
@@ -37,7 +37,7 @@ function M.add_package_directly()
 
         local package_part = user_input:gsub('dotnet add package ', '')
 
-        M.select_project(function(project_path)
+        select_project(function(project_path)
 
             local final_command = 'dotnet add "' .. project_path .. '" package ' .. package_part
             local package_name = package_part:match("^%S+")

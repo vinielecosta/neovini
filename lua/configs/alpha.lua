@@ -19,7 +19,7 @@ local header = {[[ _______            ____   ____.__       .__       ____.]],
 -- Defines the interactive buttons that will appear in the main menu.
 dashboard.section.buttons.val = {dashboard.button("f", "󰍉  Find files", ":Telescope find_files <CR>"),
                                  dashboard.button("p", "󱊓  Find projects",
-    "<cmd>lua require('core.dotnet.select_project').select_project()<CR>"),
+    "<cmd>lua require('core.functions.select_project').select_project()<CR>"),
                                  dashboard.button("r", "󰏌  Recent files", ":Telescope oldfiles <CR>"),
                                  dashboard.button("g", "󰍄  Find text", ":Telescope live_grep <CR>"),
                                  dashboard.button("l", "󰒇  Lazy", ":Lazy <CR>"),
