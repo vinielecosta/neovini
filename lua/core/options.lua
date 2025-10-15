@@ -14,7 +14,7 @@ opt.signcolumn = 'yes' -- Keeps sign column always visible (for Git and errors)
 opt.cursorline = true -- Highlights the line where the cursor is
 
 -- Line wrapping
-opt.wrap = true -- Prevents long lines from wrapping visually
+opt.wrap = false -- Prevents long lines from wrapping visually
 
 ----------------------------------------------------------------------
 -- EDITING AND INDENTATION
