@@ -1,186 +1,254 @@
--- ~/.config/nvim/lua/core/keymaps.lua
--- Este ficheiro centraliza a definição de atalhos de teclado (keymaps)
--- para ações gerais do editor e funcionalidades customizadas.
-
--- Cria um atalho local para a função de mapeamento de teclas do Neovim,
--- tornando o código mais limpo e legível.
 local keymap = vim.keymap.set
 
 ----------------------------------------------------------------------
--- MODO NORMAL (n)
+-- NORMAL MODE (n)
 ----------------------------------------------------------------------
 
----
--- Título: Ações Principais e de UI
----
+keymap('n', '<C-s>', ':w<CR>', {
+    desc = 'Save file'
+})
 
--- Paleta de Comandos: Atalho principal para aceder à paleta de comandos customizada.
-keymap('n', '<leader><leader>', function()
-  require('core.palette').open()
-end, { desc = "Abrir Paleta de Comandos" })
+keymap('n', '<C-h>', '<C-w>h', {
+    desc = 'Move to left window'
+})
+keymap('n', '<C-j>', '<C-w>j', {
+    desc = 'Move to bottom window'
+})
+keymap('n', '<C-k>', '<C-w>k', {
+    desc = 'Move to top window'
+})
+keymap('n', '<C-l>', '<C-w>l', {
+    desc = 'Move to right window'
+})
 
--- Salvar: Atalho universal para salvar o ficheiro atual.
-keymap('n', '<C-s>', ':w<CR>', { desc = 'Salvar arquivo' })
+keymap('n', '<C-Up>', ':resize +2<CR>', {
+    desc = 'Increase window height'
+})
+keymap('n', '<C-Down>', ':resize -2<CR>', {
+    desc = 'Decrease window height'
+})
+keymap('n', '<C-Left>', ':vertical resize -2<CR>', {
+    desc = 'Decrease window width'
+})
+keymap('n', '<C-Right>', ':vertical resize +2<CR>', {
+    desc = 'Increase window width'
+})
 
----
--- Título: Navegação e Gestão de Janelas (Splits)
----
+keymap('n', '<leader>q', ':q<CR>', {
+    desc = 'Close current buffer'
+})
 
--- Navegação entre janelas: Permite mover-se entre splits usando Ctrl + H/J/K/L.
-keymap('n', '<C-h>', '<C-w>h', { desc = 'Mover para janela à esquerda' })
-keymap('n', '<C-j>', '<C-w>j', { desc = 'Mover para janela abaixo' })
-keymap('n', '<C-k>', '<C-w>k', { desc = 'Mover para janela acima' })
-keymap('n', '<C-l>', '<C-w>l', { desc = 'Mover para janela à direita' })
+-- keymap('n', '<leader>tt', function()
+--     require('core.dotnet.dotnet-test').run_tests_from_solution()
+-- end, {
+--     desc = '.NET: Run project tests'
+-- })
 
--- Redimensionar janelas: Permite ajustar o tamanho dos splits.
-keymap('n', '<C-Up>', ':resize +2<CR>', { desc = 'Aumentar altura da janela' })
-keymap('n', '<C-Down>', ':resize -2<CR>', { desc = 'Diminuir altura da janela' })
-keymap('n', '<C-Left>', ':vertical resize -2<CR>', { desc = 'Diminuir largura da janela' })
-keymap('n', '<C-Right>', ':vertical resize +2<CR>', { desc = 'Aumentar largura da janela' })
+-- [T]este por [T]este ou [T]este de [C]lasse
+-- Roda o teste mais próximo do cursor (pode ser um método ou uma classe)
+keymap("n", "<leader>tt", function()
+    require("neotest").run.run()
+end, {
+    desc = "Neotest: Rodar teste mais próximo (Teste/Classe)"
+})
 
----
--- Título: Gestão de Buffers (Ficheiros Abertos)
----
+-- [T]este de [S]olução (Suite)
+-- Roda todos os testes encontrados pelo adaptador (graças ao 'use_solution_scope = true')
+keymap("n", "<leader>ts", function()
+    require("neotest").run.run({
+        suite = true
+    })
+end, {
+    desc = "Neotest: Rodar toda a suíte (Solução)"
+})
 
--- Fechar Buffer: Fecha o ficheiro atualmente em foco.
-keymap('n', '<leader>q', ':bdelete<CR>', { desc = 'Fechar buffer atual' })
+-- [T]este de [F]ile (Arquivo)
+-- Roda todos os testes no arquivo atual
+keymap("n", "<leader>tf", function()
+    require("neotest").run.run(vim.fn.expand("%"))
+end, {
+    desc = "Neotest: Rodar testes do arquivo atual"
+})
 
----
--- Título: Diagnósticos LSP (Erros e Avisos)
----
+-- [T]este [L]ast (Último)
+-- Roda novamente o último teste executado
+keymap("n", "<leader>tl", function()
+    require("neotest").run.run_last()
+end, {
+    desc = "Neotest: Rodar último teste"
+})
 
--- Ver Diagnóstico: Mostra os detalhes do erro/aviso na linha atual numa janela flutuante.
-keymap('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Mostrar diagnóstico da linha' })
--- Navegar Diagnósticos: Pula para o próximo ou anterior erro/aviso no ficheiro.
-keymap('n', ']d', vim.diagnostic.goto_next, { desc = 'Ir para o próximo diagnóstico' })
-keymap('n', '[d', vim.diagnostic.goto_prev, { desc = 'Ir para o diagnóstico anterior' })
+-- [T]este [O]utput (Saída)
+-- Abre/fecha o painel de saída do último teste
+keymap("n", "<leader>to", function()
+    require("neotest").output.open()
+end, {
+    desc = "Neotest: Abrir painel de saída"
+})
 
-----------------------------------------------------------------------
--- FUNCIONALIDADES .NET E WORKFLOWS COMPLEXOS
-----------------------------------------------------------------------
--- As funções abaixo definem lógicas mais complexas que são acionadas por atalhos.
--- Elas são tornadas globais (_G) para que possam ser acedidas pela paleta de comandos.
+-- [T]este [S]ummary (Sumário)
+-- Abre/fecha a janela de sumário dos testes
+keymap("n", "<leader>tS", function()
+    require("neotest").summary.toggle()
+end, {
+    desc = "Neotest: Abrir/Fechar sumário"
+})
 
----
--- Título: Template de Classe C#
----
--- Função que gera um template de classe C# com namespace e nome da classe automáticos.
-_G.insert_csharp_template = function()
-  if vim.fn.line('$') == 1 and vim.fn.getline(1) == '' then
-    local filename = vim.api.nvim_buf_get_name(0)
-    if not filename:match('%.cs$') then
-      vim.notify("Arquivo não é .cs. Template não inserido.", vim.log.levels.WARN)
-      return
-    end
-    local class_name = vim.fn.fnamemodify(filename, ':t:r')
-    local sln_file = vim.fn.findfile('.sln', vim.fn.getcwd() .. ';')
-    local namespace
-    if sln_file ~= '' and sln_file ~= nil then
-      local sln_dir = vim.fn.fnamemodify(sln_file, ':p:h')
-      local solution_name = vim.fn.fnamemodify(sln_file, ':t:r')
-      local current_dir = vim.fn.fnamemodify(filename, ':p:h')
-      local relative_path = current_dir:gsub(vim.pesc(sln_dir), ''):gsub('^[\\/]', '')
-      local sub_namespace = relative_path:gsub('[\\/]', '.')
-      if sub_namespace ~= '' then
-        namespace = solution_name .. '.' .. sub_namespace
-      else
-        namespace = solution_name
-      end
-    else
-      namespace = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-    end
-    local template = { 'namespace ' .. namespace .. ';', '', 'public class ' .. class_name, '{', '    ', '}' }
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, template)
-    vim.api.nvim_win_set_cursor(0, { 5, 5 })
-    vim.notify("Template de classe C# inserido!", vim.log.levels.INFO)
-  else
-    vim.notify("O arquivo não está vazio. Template não inserido.", vim.log.levels.INFO)
-  end
-end
-keymap('n', '<leader>ct', _G.insert_csharp_template, { desc = 'C#: Inserir template de classe' })
+keymap('n', '<leader>rp', function()
+    require('core.dotnet.dotnet-run').run_project()
+end, {
+    desc = '.NET: Run specific project'
+})
 
----
--- Título: Execução de Testes Unitários
----
--- Função que abre o Telescope para selecionar um projeto de teste (.csproj com <IsTestProject>true</IsTestProject>)
--- e executa 'dotnet test' numa janela flutuante.
-_G.run_dotnet_tests = function()
-  require('telescope.builtin').find_files({
-    prompt_title = 'Selecione o Projeto de Teste (.csproj)',
-    find_command = { 'pwsh', '-NoProfile', '-Command',
-      "Get-ChildItem -Path . -Filter *.csproj -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern '<IsTestProject>true</IsTestProject>' -Quiet } | ForEach-Object { Resolve-Path -Path $_.FullName -Relative }" },
-    attach_mappings = function(prompt_bufnr, map)
-      local actions = require('telescope.actions')
-      local action_state = require('telescope.actions.state')
-      local function on_project_select()
-        local selection = action_state.get_selected_entry()
-        local project_path = selection.value
-        actions.close(prompt_bufnr)
-        local term = require('toggleterm.terminal').Terminal:new({
-          cmd = 'dotnet test "' .. project_path .. '"',
-          direction = 'float',
-          close_on_exit = false,
-        })
-        term:toggle()
-      end
-      map('i', '<CR>', on_project_select)
-      map('n', '<CR>', on_project_select)
-      return true
-    end,
-  })
-end
-keymap('n', '<leader>tt', _G.run_dotnet_tests, { desc = 'Test: Rodar testes do projeto' })
+keymap('n', '<leader>na', function()
+    require('core.dotnet.add-package').add_package_directly()
+end, {
+    desc = 'NuGet: Add package directly'
+})
 
----
--- Título: Execução de Projetos
----
--- Atalho para rodar um projeto .NET. Abre o Telescope para selecionar o .csproj e
--- executa 'dotnet run' num terminal dividido.
-keymap('n', '<leader>r', function()
-  require('telescope.builtin').find_files({
-    prompt_title = "Run .NET Project",
-    find_command = { 'fd', '--type', 'f', '--glob', '*.csproj' },
-    attach_mappings = function(prompt_bufnr, map)
-      local actions = require('telescope.actions')
-      local action_state = require('telescope.actions.state')
-      local function run_dotnet_project()
-        local selection = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        local command = 'split term://dotnet run --project ' .. selection.value
-        vim.cmd(command)
-      end
-      map('i', '<CR>', run_dotnet_project)
-      map('n', '<CR>', run_dotnet_project)
-      return true
-    end,
-  })
-end, { desc = 'Rodar projeto .NET específico' })
+keymap('n', '<leader>pr', function()
+    require('core.dotnet.add-reference').add_project_reference()
+end, {
+    desc = '.NET: Add project reference'
+})
 
----
--- Título: Gestão de Pacotes e Projetos
----
--- Atalhos para acionar os fluxos de trabalho definidos nos módulos 'core.nuget' e 'core.project'.
-keymap('n', '<leader>np', function() require('core.nuget').install_package() end, { desc = 'NuGet: Buscar e Adicionar Pacote' })
-keymap('n', '<leader>na', function() require('core.nuget').add_package_directly() end, { desc = 'NuGet: Adicionar Pacote Diretamente' })
-keymap('n', '<leader>pr', function() require('core.project').add_project_reference() end, { desc = 'Projeto: Adicionar Referência' })
+keymap('n', '<leader>dn', function()
+    require('core.dotnet.dotnet-new').create_project()
+end, {
+    desc = '.NET: Create new project'
+})
 
----
--- Título: Encontrar e Substituir
----
--- Atalho para o fluxo de encontrar e substituir com a UI customizada do NUI.
 keymap('n', '<leader>s', function()
-  -- A lógica completa está definida no ficheiro original e é acionada aqui.
-end, { desc = 'Encontrar e Substituir no arquivo' })
+    require('core.functions.find_replace').find_and_replace()
+end, {
+    desc = 'Find and Replace in file'
+})
+
+keymap('n', '<leader>z', ':ZenMode<CR>', {
+    desc = 'Enable Zen mode'
+})
+
+keymap('n', '<leader>tw', ':Twilight<CR>', {
+    desc = 'Enable Twilight mode'
+})
+
+keymap('n', '<leader>e', ':NvimTreeToggle<CR>', {
+    desc = 'Open/Close File Explorer'
+})
+
+keymap('n', ']d', vim.diagnostic.goto_next, {
+    desc = 'Go to next diagnostic'
+})
+keymap('n', '[d', vim.diagnostic.goto_prev, {
+    desc = 'Go to previous diagnostic'
+})
+
+keymap('n', 'gD', vim.lsp.buf.declaration, {
+    desc = 'LSP: Go to declaration'
+})
+keymap('n', 'gd', vim.lsp.buf.definition, {
+    desc = 'LSP: Go to definition'
+})
+keymap('n', 'K', vim.lsp.buf.hover, {
+    desc = 'LSP: Show hover documentation'
+})
+keymap('n', 'gi', vim.lsp.buf.implementation, {
+    desc = 'LSP: Go to implementation'
+})
+
+keymap('n', '<leader>ca', function()
+    vim.cmd('write')
+    vim.lsp.buf.code_action()
+end, {
+    desc = 'LSP: Show code actions'
+})
+
+keymap('n', 'gr', vim.lsp.buf.references, {
+    desc = 'LSP: Show references'
+})
+keymap('n', '<leader>rn', vim.lsp.buf.rename, {
+    desc = 'LSP: Rename symbol'
+})
+keymap('n', '<leader>ft', function()
+    vim.lsp.buf.format({
+        async = true
+    })
+end, {
+    desc = 'LSP: Format code'
+})
+
+keymap('n', '<leader>rr', function()
+    vim.cmd('Roslyn restart')
+end, {
+    desc = 'LSP: Restart Roslyn Server'
+})
+
+keymap("n", "<leader>jf", '<cmd>JsonFormatFile<cr>', {
+    desc = 'JSON: Format file'
+})
+keymap("n", "<leader>jmf", '<cmd>JsonMinifyFile<cr>', {
+    desc = 'JSON: Minify file'
+})
+
+keymap('n', '<leader>vt', '<Cmd>ToggleTerm direction=vertical<CR>', {
+    desc = 'Toggle terminal vertically'
+})
+
+keymap('n', '<leader>ht', '<Cmd>ToggleTerm direction=horizontal<CR>', {
+    desc = 'Toggle terminal horizontally'
+})
+
+keymap('n', '<C-a>', '<Cmd>Alpha<CR>', {
+    desc = 'Show Alpha'
+})
+
+keymap('n', '<leader>tw', ':Twilight<CR>', {
+    desc = 'Twilight mode'
+})
+
+keymap('n', '<M-l>', 'zL', {
+    desc = 'Scroll Right Half-Screen'
+}) -- Alt + L
+keymap('n', '<M-h>', 'zH', {
+    desc = 'Scroll Left Half-Screen'
+})
 
 ----------------------------------------------------------------------
--- MODO DE INSERÇÃO (i)
+-- VISUAL MODE (v)
 ----------------------------------------------------------------------
--- Permite sair do modo de inserção de forma mais ergonómica.
-keymap('i', 'jk', '<ESC>', { desc = 'Sair do modo de inserção' })
+
+keymap('v', '<', '<gv', {
+    desc = 'Indent left (keep selection)'
+})
+keymap('v', '>', '>gv', {
+    desc = 'Indent right (keep selection)'
+})
 
 ----------------------------------------------------------------------
--- MODO VISUAL (v)
+-- INSERT MODE (i)
 ----------------------------------------------------------------------
--- Mantém a seleção visual após a indentação.
-keymap('v', '<', '<gv', { desc = 'Identar para a esquerda (manter seleção)' })
-keymap('v', '>', '>gv', { desc = 'Identar para a direita (manter seleção)' })
+
+keymap('i', 'jk', '<ESC>', {
+    desc = 'Exit insert mode'
+})
+
+keymap('i', '<C-H>', '<C-W>', {
+    noremap = true,
+    desc = 'Binding delete on "Ctrl + Backspace'
+})
+
+keymap('i', '<C-Right>', '<Esc>ea', {
+    desc = 'Move to end of word'
+})
+keymap('i', '<C-Left>', '<Esc>bi', {
+    desc = 'Move to beginning of word'
+})
+
+----------------------------------------------------------------------
+-- TERMINAL MODE (t)
+----------------------------------------------------------------------
+
+keymap('t', '<C-t>', '<Cmd>ToggleTerm<CR>', {
+    desc = 'Hide terminal'
+})
+
