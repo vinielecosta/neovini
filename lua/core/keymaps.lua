@@ -38,10 +38,60 @@ keymap('n', '<leader>q', ':q<CR>', {
     desc = 'Close current buffer'
 })
 
-keymap('n', '<leader>tt', function()
-    require('core.dotnet.dotnet-test').run_tests()
+-- keymap('n', '<leader>tt', function()
+--     require('core.dotnet.dotnet-test').run_tests_from_solution()
+-- end, {
+--     desc = '.NET: Run project tests'
+-- })
+
+-- [T]este por [T]este ou [T]este de [C]lasse
+-- Roda o teste mais próximo do cursor (pode ser um método ou uma classe)
+keymap("n", "<leader>tt", function()
+    require("neotest").run.run()
 end, {
-    desc = '.NET: Run project tests'
+    desc = "Neotest: Rodar teste mais próximo (Teste/Classe)"
+})
+
+-- [T]este de [S]olução (Suite)
+-- Roda todos os testes encontrados pelo adaptador (graças ao 'use_solution_scope = true')
+keymap("n", "<leader>ts", function()
+    require("neotest").run.run({
+        suite = true
+    })
+end, {
+    desc = "Neotest: Rodar toda a suíte (Solução)"
+})
+
+-- [T]este de [F]ile (Arquivo)
+-- Roda todos os testes no arquivo atual
+keymap("n", "<leader>tf", function()
+    require("neotest").run.run(vim.fn.expand("%"))
+end, {
+    desc = "Neotest: Rodar testes do arquivo atual"
+})
+
+-- [T]este [L]ast (Último)
+-- Roda novamente o último teste executado
+keymap("n", "<leader>tl", function()
+    require("neotest").run.run_last()
+end, {
+    desc = "Neotest: Rodar último teste"
+})
+
+-- [T]este [O]utput (Saída)
+-- Abre/fecha o painel de saída do último teste
+keymap("n", "<leader>to", function()
+    require("neotest").output.open()
+end, {
+    desc = "Neotest: Abrir painel de saída"
+})
+
+-- [T]este [S]ummary (Sumário)
+-- Abre/fecha a janela de sumário dos testes
+keymap("n", "<leader>tS", function()
+    require("neotest").summary.toggle()
+end, {
+    desc = "Neotest: Abrir/Fechar sumário"
 })
 
 keymap('n', '<leader>rp', function()
@@ -154,6 +204,13 @@ keymap('n', '<C-a>', '<Cmd>Alpha<CR>', {
 
 keymap('n', '<leader>tw', ':Twilight<CR>', {
     desc = 'Twilight mode'
+})
+
+keymap('n', '<M-l>', 'zL', {
+    desc = 'Scroll Right Half-Screen'
+}) -- Alt + L
+keymap('n', '<M-h>', 'zH', {
+    desc = 'Scroll Left Half-Screen'
 })
 
 ----------------------------------------------------------------------

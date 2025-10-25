@@ -17,7 +17,7 @@ require('toggleterm').setup({
     persist_mode = true,
     direction = 'horizontal',
     close_on_exit = true,
-    shell = vim.o.shell,
+    shell = 'pwsh',
     auto_scroll = true,
     -- Float settings
     float_opts = {
@@ -31,4 +31,3 @@ require('toggleterm').setup({
         winblend = 3
     }
 })
-

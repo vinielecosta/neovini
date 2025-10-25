@@ -1,20 +1,26 @@
 return { ----------------------------------------------------------------------
 -- UI & Themes
 ----------------------------------------------------------------------
-{
-    'sainnhe/sonokai',
-    lazy = false,
-    priority = 1000,
-    config = function()
-        vim.g.sonokai_style = 'shusia'
-        vim.g.sonokai_enable_italic = 1
-        vim.cmd.colorscheme('sonokai')
-    end
+{'sainnhe/sonokai' -- lazy = false,
+-- priority = 1000,
+-- config = function()
+--     vim.g.sonokai_style = 'shusia'
+--     vim.g.sonokai_enable_italic = 1
+--     vim.cmd.colorscheme('sonokai')
+-- end
 }, {'nvim-tree/nvim-web-devicons'}, {
     'nvim-tree/nvim-tree.lua',
     dependencies = {'nvim-tree/nvim-web-devicons'},
     config = function()
         require('configs.nvim-tree')
+    end
+}, {
+    "bluz71/vim-moonfly-colors",
+    name = "moonfly",
+    lazy = false,
+    priority = 1000,
+    config = function()
+        vim.cmd.colorscheme('moonfly')
     end
 }, {
     'thebigcicca/neokinds',
@@ -81,6 +87,20 @@ return { ----------------------------------------------------------------------
     config = function()
         -- Ativa o plugin
         require("configs.which-key")
+    end
+}, {
+    "nvim-neotest/neotest",
+    dependencies = {"nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter", "MunifTanjim/nui.nvim",
+                    "Issafalcon/neotest-dotnet" -- Adaptador específico para .NET
+    },
+    config = function()
+        require("configs.neotest")
+    end
+}, {
+    'MeF0504/vim-pets',
+    config = function()
+        vim.g.pets_garden_width = 30
+        vim.g.pets_garden_height = 10
     end
 }, {
     'MeanderingProgrammer/render-markdown.nvim',

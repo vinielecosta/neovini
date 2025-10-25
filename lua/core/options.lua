@@ -14,7 +14,7 @@ opt.signcolumn = 'yes' -- Keeps sign column always visible (for Git and errors)
 opt.cursorline = true -- Highlights the line where the cursor is
 
 -- Line wrapping
-opt.wrap = false -- Prevents long lines from wrapping visually
+opt.wrap = true -- Enables long lines to wrap visually by default
 
 ----------------------------------------------------------------------
 -- EDITING AND INDENTATION
@@ -74,4 +74,21 @@ vim.diagnostic.config({
         source = "always"
     },
     severity_sort = true
+})
+
+----------------------------------------------------------------------
+-- FILETYPE-SPECIFIC SETTINGS
+----------------------------------------------------------------------
+
+-- Creates an autocommand group for better organization
+local augroup = vim.api.nvim_create_augroup('FileTypeSettings', { clear = true })
+
+-- Creates the autocommand for Markdown files
+vim.api.nvim_create_autocmd('FileType', {
+    group = augroup,
+    pattern = 'markdown', -- Applies the rule for markdown filetypes
+    callback = function()
+        -- Uses 'vim.opt_local' to change the option only for the current buffer
+        vim.opt_local.wrap = false
+    end,
 })

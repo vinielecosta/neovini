@@ -36,4 +36,5 @@ require("core.keymaps")
 require("core.options")
 require("core.dotnet.add-package")
 require("core.dotnet.add-reference")
+vim.cmd.colorscheme('moonfly')
 
