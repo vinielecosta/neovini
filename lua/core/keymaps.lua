@@ -38,6 +38,10 @@ keymap('n', '<leader>q', ':q<CR>', {
     desc = 'Close current buffer'
 })
 
+keymap('n', '<leader>fa', ':set foldmethod=indent<CR>', {
+    desc = 'Collapse code by indent'
+})
+
 -- keymap('n', '<leader>tt', function()
 --     require('core.dotnet.dotnet-test').run_tests_from_solution()
 -- end, {
