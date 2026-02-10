@@ -42,6 +42,15 @@ keymap('n', '<leader>fa', ':set foldmethod=indent<CR>', {
     desc = 'Collapse code by indent'
 })
 
+-- No seu arquivo de configuração Lua (ex: init.lua ou keymaps.lua)
+
+-- Mapeia 'p' e 'P' no modo Normal para colar sempre do registro "0" (o último yank/cópia)
+keymap("n", "p", '"0p', { desc = "Colar (p) o último yank" })
+keymap("n", "P", '"0P', { desc = "Colar (P) o último yank" })
+
+-- Mapeia 'p' e 'P' no modo Visual (para substituir seleção)
+keymap("x", "p", '"0p', { desc = "Colar (p) o último yank (Visual)" })
+keymap("x", "P", '"0P', { desc = "Colar (P) o último yank (Visual)" })
 -- keymap('n', '<leader>tt', function()
 --     require('core.dotnet.dotnet-test').run_tests_from_solution()
 -- end, {

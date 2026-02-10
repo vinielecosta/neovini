@@ -8,7 +8,10 @@ return { ----------------------------------------------------------------------
 --     vim.g.sonokai_enable_italic = 1
 --     vim.cmd.colorscheme('sonokai')
 -- end
-}, {'nvim-tree/nvim-web-devicons'}, {
+},
+
+{ "rebelot/kanagawa.nvim" },
+{'nvim-tree/nvim-web-devicons'}, {
     'nvim-tree/nvim-tree.lua',
     dependencies = {'nvim-tree/nvim-web-devicons'},
     config = function()
